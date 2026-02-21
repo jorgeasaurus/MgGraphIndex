@@ -1,0 +1,12 @@
+.DS_Store
+Thumbs.db
+*.bak
+*.code-workspace
+node_modules/
+.vercel/
+.secrets
+event.json
+claude_requirements_md.md
+.playwright-mcp/*.log
+.playwright-mcp/*.png
+tasks/features.md

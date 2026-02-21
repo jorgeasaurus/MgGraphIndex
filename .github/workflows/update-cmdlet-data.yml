@@ -1,0 +1,71 @@
+name: Update cmdlet data
+
+on:
+  schedule:
+    - cron: "15 6 * * *"
+  workflow_dispatch:
+
+concurrency:
+  group: update-cmdlet-data
+  cancel-in-progress: true
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+jobs:
+  update-data:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+
+    outputs:
+      changes_detected: ${{ steps.auto-commit.outputs.changes_detected }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install Microsoft.Graph modules
+        uses: JustinGrote/ModuleFast-action@v0.0.1
+        with:
+          specification: |
+            Microsoft.Graph
+            Microsoft.Graph.Beta
+
+      - name: Run extraction script
+        shell: pwsh
+        run: ./scripts/get-graphcmdlets.ps1 -IncludeBeta -Verbose
+
+      - name: Commit updated data
+        id: auto-commit
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "chore: update cmdlet metadata"
+          commit_user_name: "github-actions[bot]"
+          commit_user_email: "41898282+github-actions[bot]@users.noreply.github.com"
+          commit_author: "github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>"
+          file_pattern: "public/data/**"
+
+  deploy:
+    needs: update-data
+    if: needs.update-data.outputs.changes_detected == 'true'
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: public
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

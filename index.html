@@ -7,25 +7,36 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <script>
+    (function(){
+        var s = localStorage.getItem('appearance');
+        var prefersDark = window.matchMedia('(prefers-color-scheme:dark)').matches;
+        if (s === 'light' || (!s && !prefersDark)) {
+            document.documentElement.classList.add('light');
+        }
+    })();
+    </script>
     <style>
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
         :root {
-            --glass-bg: rgba(255, 255, 255, 0.55);
-            --glass-bg-heavy: rgba(255, 255, 255, 0.72);
-            --glass-bg-light: rgba(255, 255, 255, 0.35);
-            --glass-border: rgba(0, 0, 0, 0.08);
-            --glass-highlight: rgba(255, 255, 255, 0.7);
-            --glass-blur: blur(40px) saturate(180%);
-            --glass-blur-heavy: blur(60px) saturate(200%);
+            color-scheme: dark;
+            --glass-bg: rgba(255, 255, 255, 0.06);
+            --glass-bg-heavy: rgba(255, 255, 255, 0.10);
+            --glass-bg-light: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --glass-highlight: rgba(255, 255, 255, 0.05);
+            --glass-blur: blur(20px) saturate(180%);
+            --glass-blur-heavy: blur(40px) saturate(190%);
+            --dark-surface: rgba(44, 44, 46, 0.92);
             --radius-sm: 10px;
             --radius-md: 16px;
             --radius-lg: 24px;
             --radius-pill: 50px;
-            --text-primary: #1d1d1f;
-            --text-secondary: #6e6e73;
-            --text-tertiary: #aeaeb2;
-            --text-quaternary: #c7c7cc;
+            --text-primary: rgba(255, 255, 255, 0.92);
+            --text-secondary: rgba(255, 255, 255, 0.70);
+            --text-tertiary: rgba(255, 255, 255, 0.45);
+            --text-quaternary: rgba(255, 255, 255, 0.25);
             --accent-blue: #007AFF;
             --accent-indigo: #5856D6;
             --accent-teal: #5AC8FA;
@@ -34,10 +45,10 @@
             --accent-red: #FF3B30;
             --accent-pink: #FF2D55;
             --accent-purple: #AF52DE;
-            --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.06);
-            --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.06), 0 2px 4px rgba(0, 0, 0, 0.04);
-            --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.08), 0 4px 8px rgba(0, 0, 0, 0.04);
-            --shadow-glow: 0 0 0 3px rgba(0, 122, 255, 0.3);
+            --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.20);
+            --shadow-md: 0 2px 8px rgba(0, 0, 0, 0.25);
+            --shadow-lg: 0 4px 16px rgba(0, 0, 0, 0.30);
+            --shadow-glow: 0 0 0 4px rgba(0, 122, 255, 0.35);
             --font-display: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvetica Neue', sans-serif;
             --font-body: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', sans-serif;
             --font-mono: 'SF Mono', 'JetBrains Mono', 'Menlo', monospace;
@@ -48,20 +59,20 @@
             color: var(--text-primary);
             min-height: 100vh;
             overflow-x: hidden;
-            background: #f0eef6;
+            background: #1c1c1e;
             background-image:
-                radial-gradient(ellipse 80% 60% at 20% 10%, rgba(175, 82, 222, 0.15), transparent 60%),
-                radial-gradient(ellipse 70% 50% at 80% 20%, rgba(90, 200, 250, 0.15), transparent 60%),
-                radial-gradient(ellipse 60% 50% at 50% 80%, rgba(255, 149, 0, 0.08), transparent 60%),
-                radial-gradient(ellipse 90% 70% at 60% 40%, rgba(0, 122, 255, 0.08), transparent 70%);
+                radial-gradient(ellipse 80% 60% at 20% 10%, rgba(175, 82, 222, 0.04), transparent 60%),
+                radial-gradient(ellipse 70% 50% at 80% 20%, rgba(90, 200, 250, 0.03), transparent 60%),
+                radial-gradient(ellipse 60% 50% at 50% 80%, rgba(255, 149, 0, 0.02), transparent 60%),
+                radial-gradient(ellipse 90% 70% at 60% 40%, rgba(0, 122, 255, 0.03), transparent 70%);
             background-attachment: fixed;
         }
 
         /* --- Scrollbar --- */
         ::-webkit-scrollbar { width: 6px; height: 6px; }
-        ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: rgba(0, 0, 0, 0.15); border-radius: 3px; }
-        ::-webkit-scrollbar-thumb:hover { background: rgba(0, 0, 0, 0.25); }
+        ::-webkit-scrollbar-track { background: rgba(255, 255, 255, 0.02); }
+        ::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.15); border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: rgba(255, 255, 255, 0.30); }
 
         /* --- Animations --- */
         @keyframes fade-up {
@@ -99,7 +110,7 @@
             position: sticky;
             top: 0;
             z-index: 40;
-            background: rgba(255, 255, 255, 0.6);
+            background: rgba(28, 28, 30, 0.85);
             backdrop-filter: var(--glass-blur-heavy);
             -webkit-backdrop-filter: var(--glass-blur-heavy);
             border-bottom: 1px solid var(--glass-border);
@@ -187,11 +198,12 @@
             position: sticky;
             top: 56px;
             z-index: 39;
-            background: rgba(255, 255, 255, 0.5);
-            backdrop-filter: var(--glass-blur);
-            -webkit-backdrop-filter: var(--glass-blur);
+            background: var(--glass-bg);
+            backdrop-filter: var(--glass-blur-heavy);
+            -webkit-backdrop-filter: var(--glass-blur-heavy);
             border-bottom: 1px solid var(--glass-border);
             padding: 12px 0;
+            box-shadow: inset 0 1px 0 var(--glass-highlight);
         }
 
         .filter-row {
@@ -205,7 +217,7 @@
             flex: 1;
             min-width: 200px;
             padding: 9px 12px 9px 36px;
-            background: rgba(255, 255, 255, 0.6);
+            background: var(--glass-bg);
             border: 1px solid var(--glass-border);
             color: var(--text-primary);
             font-family: var(--font-body);
@@ -214,14 +226,15 @@
             outline: none;
             transition: all 0.2s ease;
             border-radius: var(--radius-pill);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
+            backdrop-filter: blur(12px) saturate(150%);
+            -webkit-backdrop-filter: blur(12px) saturate(150%);
+            box-shadow: inset 0 1px 0 var(--glass-highlight), var(--shadow-sm);
         }
         .glass-input::placeholder { color: var(--text-quaternary); }
         .glass-input:focus {
             border-color: var(--accent-blue);
-            box-shadow: var(--shadow-glow);
-            background: rgba(255, 255, 255, 0.8);
+            box-shadow: var(--shadow-glow), inset 0 1px 0 var(--glass-highlight);
+            background: var(--glass-bg-heavy);
         }
 
         .search-wrap {
@@ -242,7 +255,7 @@
 
         .glass-select {
             padding: 9px 30px 9px 12px;
-            background: rgba(255, 255, 255, 0.6);
+            background: var(--glass-bg);
             border: 1px solid var(--glass-border);
             color: var(--text-secondary);
             font-family: var(--font-body);
@@ -253,9 +266,10 @@
             transition: all 0.2s ease;
             appearance: none;
             border-radius: var(--radius-pill);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23aeaeb2' fill='none' stroke-width='1.5'/%3E%3C/svg%3E");
+            backdrop-filter: blur(12px) saturate(150%);
+            -webkit-backdrop-filter: blur(12px) saturate(150%);
+            box-shadow: inset 0 1px 0 var(--glass-highlight), var(--shadow-sm);
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%238892b0' fill='none' stroke-width='1.5'/%3E%3C/svg%3E");
             background-repeat: no-repeat;
             background-position: right 10px center;
             overflow: hidden;
@@ -265,11 +279,11 @@
         }
         .glass-select:focus {
             border-color: var(--accent-blue);
-            box-shadow: var(--shadow-glow);
+            box-shadow: var(--shadow-glow), inset 0 1px 0 var(--glass-highlight);
             color: var(--text-primary);
         }
         .glass-select option {
-            background: #fff;
+            background: #2c2c2e;
             color: var(--text-primary);
         }
 
@@ -287,21 +301,24 @@
             font-weight: 600;
             letter-spacing: 0.01em;
             border: 1px solid var(--glass-border);
-            background: rgba(255, 255, 255, 0.4);
+            background: var(--glass-bg-light);
             color: var(--text-tertiary);
             cursor: pointer;
             transition: all 0.2s ease;
             border-radius: var(--radius-pill);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            box-shadow: inset 0 1px 0 var(--glass-highlight);
         }
         .verb-tag:hover {
-            background: rgba(255, 255, 255, 0.7);
+            background: var(--glass-bg-heavy);
             color: var(--text-secondary);
-            border-color: rgba(0, 0, 0, 0.12);
+            border-color: rgba(255, 255, 255, 0.20);
         }
         .verb-tag-active {
-            background: rgba(0, 122, 255, 0.1) !important;
+            background: rgba(0, 122, 255, 0.18) !important;
             color: var(--accent-blue) !important;
-            border-color: rgba(0, 122, 255, 0.25) !important;
+            border-color: rgba(0, 122, 255, 0.35) !important;
         }
 
         /* --- Presets --- */
@@ -321,7 +338,7 @@
             font-size: 0.7rem;
             font-weight: 600;
             border: 1px solid var(--glass-border);
-            background: rgba(255, 255, 255, 0.4);
+            background: rgba(255, 255, 255, 0.05);
             color: var(--text-secondary);
             border-radius: var(--radius-pill);
         }
@@ -344,7 +361,7 @@
         /* --- Theme switcher --- */
         .theme-switcher {
             padding: 7px 28px 7px 10px;
-            background: rgba(255, 255, 255, 0.6);
+            background: rgba(255, 255, 255, 0.05);
             border: 1px solid var(--glass-border);
             color: var(--text-secondary);
             font-family: var(--font-body);
@@ -357,7 +374,7 @@
             border-radius: var(--radius-pill);
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23aeaeb2' fill='none' stroke-width='1.5'/%3E%3C/svg%3E");
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%238892b0' fill='none' stroke-width='1.5'/%3E%3C/svg%3E");
             background-repeat: no-repeat;
             background-position: right 8px center;
         }
@@ -366,7 +383,7 @@
             box-shadow: var(--shadow-glow);
         }
         .theme-switcher option {
-            background: #fff;
+            background: #2c2c2e;
             color: var(--text-primary);
         }
 
@@ -377,7 +394,7 @@
             left: 0; right: 0;
             top: 100%;
             margin-top: 6px;
-            background: rgba(255, 255, 255, 0.9);
+            background: rgba(44, 44, 46, 0.95);
             backdrop-filter: var(--glass-blur);
             -webkit-backdrop-filter: var(--glass-blur);
             border: 1px solid var(--glass-border);
@@ -402,7 +419,7 @@
         }
         .recent-dropdown button:first-child { border-radius: var(--radius-md) var(--radius-md) 0 0; }
         .recent-dropdown button:last-child { border-radius: 0 0 var(--radius-md) var(--radius-md); }
-        .recent-dropdown button:hover { background: rgba(0, 122, 255, 0.06); color: var(--accent-blue); }
+        .recent-dropdown button:hover { background: rgba(0, 122, 255, 0.12); color: var(--accent-blue); }
         .recent-dropdown .clear-btn { font-size: 0.75rem; color: var(--text-tertiary); border-top: 1px solid var(--glass-border); }
         .recent-dropdown .clear-btn:hover { color: var(--accent-red); }
 
@@ -413,7 +430,7 @@
             right: 0;
             top: 100%;
             margin-top: 6px;
-            background: rgba(255, 255, 255, 0.9);
+            background: rgba(44, 44, 46, 0.95);
             backdrop-filter: var(--glass-blur);
             -webkit-backdrop-filter: var(--glass-blur);
             border: 1px solid var(--glass-border);
@@ -437,7 +454,7 @@
             cursor: pointer;
             transition: all 0.15s ease;
         }
-        .export-menu button:hover { background: rgba(0, 122, 255, 0.06); color: var(--accent-blue); }
+        .export-menu button:hover { background: rgba(0, 122, 255, 0.12); color: var(--accent-blue); }
 
         /* --- Main grid --- */
         .main-content {
@@ -532,11 +549,11 @@
             border-radius: var(--radius-pill);
             border: 1px solid;
         }
-        .badge-api-stable { color: var(--accent-blue); border-color: rgba(0, 122, 255, 0.2); background: rgba(0, 122, 255, 0.08); }
-        .badge-api-beta { color: var(--accent-orange); border-color: rgba(255, 149, 0, 0.2); background: rgba(255, 149, 0, 0.08); }
-        .badge-category { color: var(--text-tertiary); border-color: var(--glass-border); background: rgba(255, 255, 255, 0.4); }
-        .badge-perm { color: var(--accent-indigo); border-color: rgba(88, 86, 214, 0.2); background: rgba(88, 86, 214, 0.06); }
-        .badge-examples { color: var(--accent-green); border-color: rgba(52, 199, 89, 0.2); background: rgba(52, 199, 89, 0.06); }
+        .badge-api-stable { color: var(--accent-blue); border-color: rgba(0, 122, 255, 0.15); background: rgba(0, 122, 255, 0.10); }
+        .badge-api-beta { color: var(--accent-orange); border-color: rgba(255, 149, 0, 0.15); background: rgba(255, 149, 0, 0.10); }
+        .badge-category { color: var(--text-tertiary); border-color: var(--glass-border); background: rgba(255, 255, 255, 0.05); }
+        .badge-perm { color: var(--accent-indigo); border-color: rgba(88, 86, 214, 0.15); background: rgba(88, 86, 214, 0.10); }
+        .badge-examples { color: var(--accent-green); border-color: rgba(52, 199, 89, 0.15); background: rgba(52, 199, 89, 0.10); }
 
         .card-desc {
             font-family: var(--font-body);
@@ -569,7 +586,7 @@
         /* --- Detail sections --- */
         .detail-syntax {
             position: relative;
-            background: rgba(0, 0, 0, 0.03);
+            background: rgba(0, 0, 0, 0.25);
             border: 1px solid var(--glass-border);
             border-radius: var(--radius-sm);
             padding: 14px 44px 14px 14px;
@@ -588,7 +605,7 @@
             top: 8px;
             right: 8px;
             padding: 5px;
-            background: rgba(255, 255, 255, 0.6);
+            background: rgba(255, 255, 255, 0.08);
             border: 1px solid var(--glass-border);
             border-radius: 6px;
             color: var(--text-tertiary);
@@ -640,7 +657,7 @@
         }
         .params-table td {
             padding: 6px 14px 6px 0;
-            border-bottom: 1px solid rgba(0, 0, 0, 0.04);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
         }
         .params-table .param-name { color: var(--accent-blue); }
         .params-table .param-type { color: var(--text-secondary); }
@@ -649,7 +666,7 @@
 
         .example-block {
             position: relative;
-            background: rgba(0, 0, 0, 0.03);
+            background: rgba(0, 0, 0, 0.25);
             border: 1px solid var(--glass-border);
             border-radius: var(--radius-sm);
             padding: 12px 44px 12px 12px;
@@ -669,9 +686,9 @@
             font-size: 0.75rem;
             font-weight: 500;
             padding: 3px 10px;
-            border: 1px solid rgba(88, 86, 214, 0.15);
+            border: 1px solid rgba(88, 86, 214, 0.25);
             color: var(--accent-indigo);
-            background: rgba(88, 86, 214, 0.05);
+            background: rgba(88, 86, 214, 0.12);
             margin: 2px;
             border-radius: var(--radius-pill);
         }
@@ -680,18 +697,18 @@
             font-family: var(--font-mono);
             font-size: 0.78rem;
             padding: 4px 12px;
-            background: rgba(255, 255, 255, 0.5);
+            background: rgba(255, 255, 255, 0.05);
             border: 1px solid var(--glass-border);
             color: var(--text-secondary);
             cursor: pointer;
             transition: all 0.15s ease;
             border-radius: var(--radius-pill);
         }
-        .related-btn:hover { color: var(--accent-blue); border-color: rgba(0, 122, 255, 0.2); background: rgba(0, 122, 255, 0.06); }
+        .related-btn:hover { color: var(--accent-blue); border-color: rgba(0, 122, 255, 0.2); background: rgba(0, 122, 255, 0.12); }
 
         /* --- PowerShell syntax highlighting (light bg) --- */
         .ps-comment { color: var(--accent-green); font-style: italic; }
-        .ps-string { color: #c41a16; }
+        .ps-string { color: #ff6b6b; }
         .ps-variable { color: var(--accent-blue); }
         .ps-cmdlet { color: var(--accent-indigo); }
         .ps-type { color: var(--accent-purple); }
@@ -808,7 +825,7 @@
             font-size: 0.8rem;
             font-weight: 600;
             border: 1px solid var(--glass-border);
-            background: rgba(255, 255, 255, 0.4);
+            background: rgba(255, 255, 255, 0.05);
             color: var(--text-tertiary);
             cursor: pointer;
             transition: all 0.2s ease;
@@ -857,7 +874,7 @@
             max-width: 300px;
             pointer-events: auto;
             box-shadow: var(--shadow-lg);
-            filter: drop-shadow(0 4px 12px rgba(0,0,0,0.15));
+            filter: drop-shadow(0 4px 12px rgba(0,0,0,0.25));
         }
         .onboarding-tip p {
             font-family: var(--font-body);
@@ -896,6 +913,108 @@
             transition: background 0.15s;
         }
         .onboarding-next:hover { background: rgba(0, 122, 255, 0.2); }
+
+        /* --- Progressive enhancement fallback --- */
+        @supports not (backdrop-filter: blur(1px)) {
+            .glass-panel, .header-bar, .filter-bar, .glass-input, .glass-select,
+            .theme-switcher, .recent-dropdown, .export-menu, .alpha-nav,
+            .back-to-top, .icon-btn, .mobile-filter-toggle {
+                background-color: var(--dark-surface) !important;
+            }
+        }
+
+        /* --- High contrast --- */
+        @media (prefers-contrast: high) {
+            :root { --glass-border: rgba(255, 255, 255, 0.30); --text-primary: #fff; }
+        }
+
+        /* --- Selection --- */
+        ::selection { background: rgba(0, 122, 255, 0.3); color: #fff; }
+
+        /* --- Light mode --- */
+        :root.light {
+            color-scheme: light;
+            --glass-bg: rgba(255, 255, 255, 0.70);
+            --glass-bg-heavy: rgba(255, 255, 255, 0.80);
+            --glass-bg-light: rgba(255, 255, 255, 0.50);
+            --glass-border: rgba(0, 0, 0, 0.08);
+            --glass-highlight: rgba(255, 255, 255, 0.90);
+            --glass-blur: blur(20px) saturate(180%);
+            --glass-blur-heavy: blur(40px) saturate(190%);
+            --dark-surface: rgba(242, 242, 247, 0.95);
+            --text-primary: rgba(0, 0, 0, 0.85);
+            --text-secondary: rgba(0, 0, 0, 0.55);
+            --text-tertiary: rgba(0, 0, 0, 0.35);
+            --text-quaternary: rgba(0, 0, 0, 0.18);
+            --accent-blue: #007AFF;
+            --accent-indigo: #5856D6;
+            --accent-teal: #32ADE6;
+            --accent-green: #34C759;
+            --accent-orange: #FF9500;
+            --accent-red: #FF3B30;
+            --accent-pink: #FF2D55;
+            --accent-purple: #AF52DE;
+            --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08);
+            --shadow-md: 0 2px 8px rgba(0, 0, 0, 0.10);
+            --shadow-lg: 0 4px 16px rgba(0, 0, 0, 0.12);
+            --shadow-glow: 0 0 0 4px rgba(0, 122, 255, 0.25);
+        }
+
+        :root.light body {
+            background: #f2f2f7;
+            background-image: none;
+        }
+
+        :root.light .header-bar,
+        :root.light .filter-bar {
+            background: rgba(242, 242, 247, 0.80);
+        }
+
+        :root.light .recent-dropdown,
+        :root.light .export-menu {
+            background: rgba(255, 255, 255, 0.95);
+        }
+
+        :root.light .glass-select option,
+        :root.light .theme-switcher option {
+            background: #ffffff;
+            color: rgba(0, 0, 0, 0.85);
+        }
+
+        :root.light .detail-syntax,
+        :root.light .example-block {
+            background: rgba(0, 0, 0, 0.03);
+        }
+
+        :root.light .onboarding-tip {
+            background: rgba(255, 255, 255, 0.95);
+        }
+
+        :root.light .glass-spinner {
+            border-color: rgba(0, 0, 0, 0.08);
+            border-top-color: var(--accent-blue);
+        }
+
+        :root.light ::-webkit-scrollbar-track { background: rgba(0, 0, 0, 0.02); }
+        :root.light ::-webkit-scrollbar-thumb { background: rgba(0, 0, 0, 0.15); }
+        :root.light ::-webkit-scrollbar-thumb:hover { background: rgba(0, 0, 0, 0.25); }
+
+        :root.light ::selection { background: rgba(0, 122, 255, 0.2); color: #000; }
+
+        :root.light .badge-api-stable { background: rgba(0, 122, 255, 0.08); border-color: rgba(0, 122, 255, 0.15); }
+        :root.light .badge-api-beta { background: rgba(255, 149, 0, 0.08); border-color: rgba(255, 149, 0, 0.15); }
+        :root.light .badge-perm { background: rgba(88, 86, 214, 0.08); border-color: rgba(88, 86, 214, 0.15); }
+        :root.light .badge-examples { background: rgba(52, 199, 89, 0.08); border-color: rgba(52, 199, 89, 0.15); }
+        :root.light .badge-category { background: rgba(0, 0, 0, 0.03); border-color: rgba(0, 0, 0, 0.08); }
+
+        @supports not (backdrop-filter: blur(1px)) {
+            :root.light .glass-panel, :root.light .header-bar, :root.light .filter-bar,
+            :root.light .glass-input, :root.light .glass-select, :root.light .theme-switcher,
+            :root.light .recent-dropdown, :root.light .export-menu, :root.light .alpha-nav,
+            :root.light .back-to-top, :root.light .icon-btn, :root.light .mobile-filter-toggle {
+                background-color: rgba(255, 255, 255, 0.92) !important;
+            }
+        }
     </style>
 </head>
 <body>
@@ -927,10 +1046,17 @@
                             <button onclick="exportResults('csv')">CSV</button>
                         </div>
                     </div>
+                    <button onclick="toggleAppearance()" class="icon-btn" id="appearanceToggle" aria-label="Toggle light/dark mode">
+                        <svg id="iconSun" style="display:none" width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+                        <svg id="iconMoon" style="display:none" width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>
+                    </button>
                     <select class="theme-switcher" id="themeSwitcher" aria-label="Switch theme" onchange="switchTheme(this.value)">
                         <option value="index.html" selected>Glass</option>
-                        <option value="default.html">Default</option>
                         <option value="cyberpunk.html">Cyberpunk</option>
+                        <option value="crt.html">CRT</option>
+                        <option value="synthwave.html">Synthwave</option>
+                        <option value="blueprint.html">Blueprint</option>
+                        <option value="solarized.html">Solarized</option>
                     </select>
                 </div>
             </div>
@@ -1016,6 +1142,7 @@
         let savedPresets = JSON.parse(localStorage.getItem('savedPresets') || '[]');
         let hasSeenOnboarding = localStorage.getItem('hasSeenOnboarding') === 'true';
         let onboardingStep = 0;
+        let descriptionsLoaded = false;
         const moduleDetailCache = new Map();
         const permissionIndex = new Map();
 
@@ -1040,17 +1167,18 @@
                 if (!response.ok) throw new Error('HTTP ' + response.status);
                 const data = await response.json();
                 cmdlets = data.map(c => ({
-                    name: c.name || 'Unknown Cmdlet',
-                    verb: c.verb || getVerb(c.name || ''),
-                    category: c.category || 'General',
-                    module: c.module || '',
-                    apiVersion: c.apiVersion || 'v1.0',
-                    description: c.description || 'Microsoft Graph PowerShell cmdlet.',
-                    permissionCount: c.permissionCount || 0,
-                    hasExamples: !!c.hasExamples,
+                    name: c.n || 'Unknown Cmdlet',
+                    verb: c.v || getVerb(c.n || ''),
+                    category: c.c || 'General',
+                    module: c.m || '',
+                    apiVersion: c.a || 'v1.0',
+                    description: '',
+                    permissionCount: c.p || 0,
+                    hasExamples: !!c.e,
                 }));
                 buildNounMap(); filteredCmdlets = [...cmdlets]; populateFilters(); restoreState();
                 if (!hasSeenOnboarding) setTimeout(showNextTip, 800);
+                loadDescriptions();
                 loadAllModuleDetails();
             } catch (e) {
                 console.warn('Manifest load failed, trying cmdlets.json:', e.message);
@@ -1133,6 +1261,34 @@
             await Promise.all(modules.map(function(m) { return loadModuleDetail(m); }));
             buildPermissionIndex();
             populatePermissionFilter();
+        }
+
+        async function loadDescriptions() {
+            try {
+                var resp = await fetch('data/descriptions.json');
+                if (!resp.ok) throw new Error('HTTP ' + resp.status);
+                var descMap = await resp.json();
+                cmdlets.forEach(function(c) {
+                    c.description = descMap[c.name] || 'Microsoft Graph PowerShell cmdlet.';
+                });
+                descriptionsLoaded = true;
+                updateRenderedDescriptions(descMap);
+                var searchTerm = document.getElementById('searchInput').value.trim();
+                if (searchTerm) filterCmdlets();
+            } catch (e) {
+                console.warn('Descriptions load failed:', e.message);
+                descriptionsLoaded = true;
+            }
+        }
+
+        function updateRenderedDescriptions(descMap) {
+            document.querySelectorAll('.cmdlet-card').forEach(function(card) {
+                var name = card.dataset.name;
+                if (!name) return;
+                var desc = descMap[name] || 'Microsoft Graph PowerShell cmdlet.';
+                var el = card.querySelector('.card-desc');
+                if (el) el.textContent = desc;
+            });
         }
 
         async function populateCardDetail(card, cmdletName, moduleName) {
@@ -1242,7 +1398,8 @@
                 if (searchLower) {
                     var nameRaw = fuzzyScore(searchLower, c.name);
                     var nameScore = nameRaw * (1 + searchLower.length / c.name.length);
-                    c._score = nameScore + fuzzyScore(searchLower, c.description) * 0.3 + fuzzyScore(searchLower, c.category) * 0.2;
+                    var descScore = descriptionsLoaded ? fuzzyScore(searchLower, c.description) * 0.3 : 0;
+                    c._score = nameScore + descScore + fuzzyScore(searchLower, c.category) * 0.2;
                     if (c._score < searchLower.length * 2) return false;
                 } else { c._score = 0; }
                 var matchesPerm = !permVal || (permissionIndex.has(permVal) && permissionIndex.get(permVal).has(c.name));
@@ -1278,7 +1435,7 @@
             return '<div class="cmdlet-card animate-fade-up verb-' + escapeHtml(verb) + '" style="animation-delay:' + animDelay + 'ms" data-name="' + escapeHtml(c.name) + '" data-module="' + escapeHtml(c.module) + '">' +
                 '<div class="card-header"><div class="card-name">' + escapeHtml(c.name) + learnLink + '</div>' +
                 '<div class="card-badges">' + apiBadge + '<span class="glass-badge badge-category">' + escapeHtml(c.category) + '</span></div></div>' +
-                '<p class="card-desc">' + escapeHtml(c.description) + '</p>' +
+                '<p class="card-desc">' + (c.description ? escapeHtml(c.description) : '') + '</p>' +
                 '<div class="card-meta">' + permBadge + exBadge + '</div>' +
                 '<div class="card-detail"></div></div>';
         }
@@ -1613,13 +1770,28 @@
             if (!hasSeenOnboarding && document.getElementById('onboardingOverlay').style.display !== 'none') dismissOnboarding();
         }, { passive: true, once: true });
 
+        function toggleAppearance() {
+            var isLight = document.documentElement.classList.toggle('light');
+            localStorage.setItem('appearance', isLight ? 'light' : 'dark');
+            updateAppearanceIcons();
+        }
+
+        function updateAppearanceIcons() {
+            var isLight = document.documentElement.classList.contains('light');
+            document.getElementById('iconSun').style.display = isLight ? 'none' : 'block';
+            document.getElementById('iconMoon').style.display = isLight ? 'block' : 'none';
+        }
+
         function switchTheme(file) {
             if (file && file !== location.pathname.split('/').pop()) {
                 location.href = file + location.hash;
             }
         }
 
-        document.addEventListener('DOMContentLoaded', loadCmdlets);
+        document.addEventListener('DOMContentLoaded', function() {
+            loadCmdlets();
+            updateAppearanceIcons();
+        });
     </script>
 </body>
 </html>

@@ -11,3 +11,4 @@ claude_requirements_md.md
 .playwright-mcp/*.png
 tasks/features.md
 docs/*
+video*/

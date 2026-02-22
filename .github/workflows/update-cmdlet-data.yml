@@ -28,6 +28,7 @@ jobs:
 
       - name: Clone Microsoft Graph docs
         run: |
+          rm -rf docs
           git clone --depth 1 --filter=blob:none --sparse \
             https://github.com/MicrosoftDocs/microsoftgraph-docs-powershell.git docs
           cd docs && git sparse-checkout set microsoftgraph/graph-powershell-1.0 microsoftgraph/graph-powershell-beta
@@ -49,12 +50,12 @@ jobs:
           fi
 
       - name: Push changes
-        if: ${{ !env.ACT && steps.auto-commit.outputs.changes_detected == 'true' }}
+        if: steps.auto-commit.outputs.changes_detected == 'true'
         run: git push
 
   deploy:
     needs: update-data
-    if: ${{ !env.ACT && needs.update-data.outputs.changes_detected == 'true' }}
+    if: needs.update-data.outputs.changes_detected == 'true'
     runs-on: ubuntu-latest
     environment:
       name: github-pages

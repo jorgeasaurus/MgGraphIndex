@@ -89,8 +89,8 @@
         /* --- Glass shared --- */
         .glass-panel {
             background: var(--glass-bg);
-            backdrop-filter: var(--glass-blur);
             -webkit-backdrop-filter: var(--glass-blur);
+            backdrop-filter: var(--glass-blur);
             border: 1px solid var(--glass-border);
             border-radius: var(--radius-md);
             box-shadow: var(--shadow-sm), inset 0 1px 0 var(--glass-highlight);
@@ -111,8 +111,8 @@
             top: 0;
             z-index: 40;
             background: rgba(28, 28, 30, 0.85);
-            backdrop-filter: var(--glass-blur-heavy);
             -webkit-backdrop-filter: var(--glass-blur-heavy);
+            backdrop-filter: var(--glass-blur-heavy);
             border-bottom: 1px solid var(--glass-border);
             padding: 14px 0;
         }
@@ -183,8 +183,8 @@
             cursor: pointer;
             transition: all 0.2s ease;
             border-radius: var(--radius-sm);
-            backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
+            backdrop-filter: blur(10px);
         }
         .icon-btn:hover {
             color: var(--accent-blue);
@@ -226,8 +226,8 @@
             outline: none;
             transition: all 0.2s ease;
             border-radius: var(--radius-pill);
-            backdrop-filter: blur(12px) saturate(150%);
             -webkit-backdrop-filter: blur(12px) saturate(150%);
+            backdrop-filter: blur(12px) saturate(150%);
             box-shadow: inset 0 1px 0 var(--glass-highlight), var(--shadow-sm);
         }
         .glass-input::placeholder { color: var(--text-quaternary); }
@@ -266,8 +266,8 @@
             transition: all 0.2s ease;
             appearance: none;
             border-radius: var(--radius-pill);
-            backdrop-filter: blur(12px) saturate(150%);
             -webkit-backdrop-filter: blur(12px) saturate(150%);
+            backdrop-filter: blur(12px) saturate(150%);
             box-shadow: inset 0 1px 0 var(--glass-highlight), var(--shadow-sm);
             background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%238892b0' fill='none' stroke-width='1.5'/%3E%3C/svg%3E");
             background-repeat: no-repeat;
@@ -762,8 +762,9 @@
             display: none;
             position: fixed;
             right: 8px;
-            top: 50%;
-            transform: translateY(-50%);
+            top: 300px;
+            bottom: 16px;
+            justify-content: center;
             flex-direction: column;
             align-items: center;
             gap: 1px;
@@ -845,8 +846,7 @@
             /* Filter bar */
             .filter-bar { position: relative; top: auto; padding: 10px 0; }
             .filter-row { flex-direction: column; gap: 8px; }
-            .glass-input, .search-wrap { width: 100%; max-width: 100%; box-sizing: border-box; }
-            .glass-select { width: 100%; max-width: 100%; box-sizing: border-box; }
+            .glass-input, .glass-select, .search-wrap { width: 100%; max-width: 100%; box-sizing: border-box; }
 
             /* Verb tags hidden, toggle visible */
             .verb-tags { display: none; }
@@ -858,9 +858,14 @@
             .card-header { flex-direction: column; gap: 6px; }
             .card-badges { align-self: flex-start; }
 
+            /* Contain expanded card content within viewport */
+            .cmdlet-card, .card-detail, .detail-syntax, .params-table, .example-block, details { max-width: 100%; box-sizing: border-box; }
+            .cmdlet-card, .card-detail, details { overflow: hidden; }
+
             /* Detail sections compact */
             .detail-syntax { padding: 10px 36px 10px 10px; font-size: 0.78rem; }
-            .param-table th, .param-table td { padding: 4px 8px; font-size: 0.75rem; }
+            .params-table { display: block; overflow-x: auto; }
+            .params-table th, .params-table td { padding: 4px 8px; font-size: 0.75rem; white-space: nowrap; }
 
             /* Back to top - touch friendly */
             .back-to-top { bottom: 16px; right: 16px; padding: 12px; }
@@ -1119,12 +1124,13 @@
                         <svg id="iconMoon" style="display:none" width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>
                     </button>
                     <select class="theme-switcher" id="themeSwitcher" aria-label="Switch theme" onchange="switchTheme(this.value)">
-                        <option value="index.html" selected>Glass</option>
+                        <option value="index.html" selected>Acrylic</option>
                         <option value="cyberpunk.html">Cyberpunk</option>
                         <option value="crt.html">CRT</option>
                         <option value="synthwave.html">Synthwave</option>
                         <option value="blueprint.html">Blueprint</option>
                         <option value="solarized.html">Solarized</option>
+                        <option value="geocities.html">Geocities</option>
                     </select>
                 </div>
             </div>
@@ -1394,7 +1400,7 @@
             }
 
             if (detail.examples && detail.examples.length > 0) {
-                html += '<details onclick="event.stopPropagation()"><summary class="detail-summary"><svg class="chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg><span>' + detail.examples.length + ' example' + (detail.examples.length > 1 ? 's' : '') + '</span></summary><div style="margin-top:6px">' +
+                html += '<details class="examples-section" onclick="event.stopPropagation()"><summary class="detail-summary"><svg class="chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg><span>' + detail.examples.length + ' example' + (detail.examples.length > 1 ? 's' : '') + '</span></summary><div style="margin-top:6px">' +
                     detail.examples.map(function(ex) {
                         return '<div class="example-block">' + highlightPowerShell(escapeHtml(ex)) +
                             '<button class="copy-btn" data-copy-ex="1" title="Copy" onclick="event.stopPropagation()"><svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg></button></div>';
@@ -1418,9 +1424,6 @@
 
             detailContainer.innerHTML = html;
             detailContainer.dataset.loaded = 'true';
-            if (card.classList.contains('card-expanded')) {
-                card.querySelectorAll('.card-detail details').forEach(function(d) { d.open = true; });
-            }
         }
 
         const tagBase = 'verb-tag';
@@ -1774,8 +1777,7 @@
                 if (card.classList.contains('card-expanded')) {
                     var name = card.dataset.name, mod = card.dataset.module;
                     if (name && mod) populateCardDetail(card, name, mod);
-                    card.querySelectorAll('details').forEach(d => d.open = true);
-                } else { card.querySelectorAll('details').forEach(d => d.open = false); }
+                } else { var dc = card.querySelector('.card-detail'); if (dc) { dc.innerHTML = ''; delete dc.dataset.loaded; } }
             }
         });
 
@@ -1799,8 +1801,7 @@
             if (card.classList.contains('card-expanded')) {
                 var name = card.dataset.name, mod = card.dataset.module;
                 if (name && mod) populateCardDetail(card, name, mod);
-                card.querySelectorAll('details').forEach(d => d.open = true);
-            } else { card.querySelectorAll('details').forEach(d => d.open = false); }
+            } else { var dc = card.querySelector('.card-detail'); if (dc) { dc.innerHTML = ''; delete dc.dataset.loaded; } }
         });
 
         window.addEventListener('scroll', function() {

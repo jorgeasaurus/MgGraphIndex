@@ -3,200 +3,864 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Microsoft Graph PowerShell Reference</title>
+    <title>MgGraph Reference</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>(function(){var s=localStorage.getItem('theme'),d=window.matchMedia('(prefers-color-scheme:dark)').matches;if(s==='dark'||(!s&&d))document.documentElement.classList.add('dark')})()</script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        surface: {
-                            950: 'rgb(var(--surface-950) / <alpha-value>)',
-                            900: 'rgb(var(--surface-900) / <alpha-value>)',
-                            800: 'rgb(var(--surface-800) / <alpha-value>)',
-                            700: 'rgb(var(--surface-700) / <alpha-value>)',
-                            600: 'rgb(var(--surface-600) / <alpha-value>)',
-                        },
-                        text: {
-                            primary: 'rgb(var(--text-primary) / <alpha-value>)',
-                            secondary: 'rgb(var(--text-secondary) / <alpha-value>)',
-                            tertiary: 'rgb(var(--text-tertiary) / <alpha-value>)',
-                            ghost: 'rgb(var(--text-ghost) / <alpha-value>)',
-                        },
-                        accent: {
-                            sky: 'rgb(var(--accent-sky) / <alpha-value>)',
-                            indigo: 'rgb(var(--accent-indigo) / <alpha-value>)',
-                            violet: 'rgb(var(--accent-violet) / <alpha-value>)',
-                            emerald: 'rgb(var(--accent-emerald) / <alpha-value>)',
-                            amber: 'rgb(var(--accent-amber) / <alpha-value>)',
-                            rose: 'rgb(var(--accent-rose) / <alpha-value>)',
-                            cyan: 'rgb(var(--accent-cyan) / <alpha-value>)',
-                        },
-                    },
-                    fontFamily: {
-                        sans: ["'Inter'", 'system-ui', 'sans-serif'],
-                        mono: ["'JetBrains Mono'", 'monospace'],
-                    },
-                    animation: {
-                        'fade-in': 'fade-in 0.2s ease forwards',
-                        'spin': 'spin 0.8s linear infinite',
-                    },
-                    keyframes: {
-                        'fade-in': {
-                            from: { opacity: '0', transform: 'translateY(4px)' },
-                            to: { opacity: '1', transform: 'translateY(0)' },
-                        },
-                    },
-                },
-            },
-        }
-    </script>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
-        :root { --surface-950:248 250 252;--surface-900:241 245 249;--surface-800:226 232 240;--surface-700:203 213 225;--surface-600:148 163 184;--text-primary:15 23 42;--text-secondary:51 65 85;--text-tertiary:100 116 139;--text-ghost:148 163 184;--accent-sky:2 132 199;--accent-indigo:79 70 229;--accent-violet:124 58 237;--accent-emerald:5 150 105;--accent-amber:217 119 6;--accent-rose:225 29 72;--accent-cyan:8 145 178; }
-        :root.dark { --surface-950:11 15 26;--surface-900:15 23 41;--surface-800:26 35 50;--surface-700:36 48 68;--surface-600:51 65 85;--text-primary:226 232 240;--text-secondary:148 163 184;--text-tertiary:100 116 139;--text-ghost:71 85 105;--accent-sky:56 189 248;--accent-indigo:129 140 248;--accent-violet:167 139 250;--accent-emerald:52 211 153;--accent-amber:251 191 36;--accent-rose:251 113 133;--accent-cyan:34 211 238; }
-        pre::-webkit-scrollbar { height: 6px; }
-        pre::-webkit-scrollbar-track { background: rgb(var(--surface-800)); border-radius: 3px; }
-        pre::-webkit-scrollbar-thumb { background: rgb(var(--surface-600)); border-radius: 3px; }
-        pre::-webkit-scrollbar-thumb:hover { background: rgb(var(--text-ghost)); }
-        details[open] > summary svg { transform: rotate(90deg); }
-        summary { list-style: none; }
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+            --glass-bg: rgba(255, 255, 255, 0.55);
+            --glass-bg-heavy: rgba(255, 255, 255, 0.72);
+            --glass-bg-light: rgba(255, 255, 255, 0.35);
+            --glass-border: rgba(0, 0, 0, 0.08);
+            --glass-highlight: rgba(255, 255, 255, 0.7);
+            --glass-blur: blur(40px) saturate(180%);
+            --glass-blur-heavy: blur(60px) saturate(200%);
+            --radius-sm: 10px;
+            --radius-md: 16px;
+            --radius-lg: 24px;
+            --radius-pill: 50px;
+            --text-primary: #1d1d1f;
+            --text-secondary: #6e6e73;
+            --text-tertiary: #aeaeb2;
+            --text-quaternary: #c7c7cc;
+            --accent-blue: #007AFF;
+            --accent-indigo: #5856D6;
+            --accent-teal: #5AC8FA;
+            --accent-green: #34C759;
+            --accent-orange: #FF9500;
+            --accent-red: #FF3B30;
+            --accent-pink: #FF2D55;
+            --accent-purple: #AF52DE;
+            --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.06);
+            --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.06), 0 2px 4px rgba(0, 0, 0, 0.04);
+            --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.08), 0 4px 8px rgba(0, 0, 0, 0.04);
+            --shadow-glow: 0 0 0 3px rgba(0, 122, 255, 0.3);
+            --font-display: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvetica Neue', sans-serif;
+            --font-body: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', sans-serif;
+            --font-mono: 'SF Mono', 'JetBrains Mono', 'Menlo', monospace;
+        }
+
+        body {
+            font-family: var(--font-body);
+            color: var(--text-primary);
+            min-height: 100vh;
+            overflow-x: hidden;
+            background: #f0eef6;
+            background-image:
+                radial-gradient(ellipse 80% 60% at 20% 10%, rgba(175, 82, 222, 0.15), transparent 60%),
+                radial-gradient(ellipse 70% 50% at 80% 20%, rgba(90, 200, 250, 0.15), transparent 60%),
+                radial-gradient(ellipse 60% 50% at 50% 80%, rgba(255, 149, 0, 0.08), transparent 60%),
+                radial-gradient(ellipse 90% 70% at 60% 40%, rgba(0, 122, 255, 0.08), transparent 70%);
+            background-attachment: fixed;
+        }
+
+        /* --- Scrollbar --- */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: rgba(0, 0, 0, 0.15); border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: rgba(0, 0, 0, 0.25); }
+
+        /* --- Animations --- */
+        @keyframes fade-up {
+            from { opacity: 0; transform: translateY(12px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        .animate-fade-up {
+            opacity: 0;
+            animation: fade-up 0.4s ease forwards;
+        }
+
+        /* --- Glass shared --- */
+        .glass-panel {
+            background: var(--glass-bg);
+            backdrop-filter: var(--glass-blur);
+            -webkit-backdrop-filter: var(--glass-blur);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-sm), inset 0 1px 0 var(--glass-highlight);
+        }
+
+        /* --- Layout --- */
+        .app-container {
+            position: relative;
+            z-index: 1;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* --- Header --- */
+        .header-bar {
+            position: sticky;
+            top: 0;
+            z-index: 40;
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: var(--glass-blur-heavy);
+            -webkit-backdrop-filter: var(--glass-blur-heavy);
+            border-bottom: 1px solid var(--glass-border);
+            padding: 14px 0;
+        }
+
+        .header-inner {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .logo-block h1 {
+            font-family: var(--font-display);
+            font-size: 1.35rem;
+            font-weight: 700;
+            letter-spacing: -0.01em;
+            color: var(--text-primary);
+        }
+        .logo-block h1 span {
+            background: linear-gradient(135deg, var(--accent-blue), var(--accent-indigo));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .logo-block .subtitle {
+            font-family: var(--font-body);
+            font-size: 0.72rem;
+            color: var(--text-tertiary);
+            letter-spacing: 0.01em;
+            margin-top: 1px;
+            font-weight: 500;
+        }
+
+        /* --- Stats --- */
+        .stats-row {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+        .stat-block {
+            text-align: center;
+        }
+        .stat-block .stat-value {
+            font-family: var(--font-display);
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--accent-blue);
+        }
+        .stat-block .stat-label {
+            font-size: 0.6rem;
+            font-weight: 600;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+            color: var(--text-tertiary);
+        }
+        .stat-divider {
+            width: 1px;
+            height: 28px;
+            background: var(--glass-border);
+        }
+
+        .icon-btn {
+            padding: 8px;
+            border: 1px solid var(--glass-border);
+            background: var(--glass-bg-light);
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border-radius: var(--radius-sm);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+        .icon-btn:hover {
+            color: var(--accent-blue);
+            background: rgba(0, 122, 255, 0.08);
+            border-color: rgba(0, 122, 255, 0.2);
+        }
+        .icon-btn svg { width: 16px; height: 16px; }
+
+        /* --- Filter bar --- */
+        .filter-bar {
+            position: sticky;
+            top: 56px;
+            z-index: 39;
+            background: rgba(255, 255, 255, 0.5);
+            backdrop-filter: var(--glass-blur);
+            -webkit-backdrop-filter: var(--glass-blur);
+            border-bottom: 1px solid var(--glass-border);
+            padding: 12px 0;
+        }
+
+        .filter-row {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .glass-input {
+            flex: 1;
+            min-width: 200px;
+            padding: 9px 12px 9px 36px;
+            background: rgba(255, 255, 255, 0.6);
+            border: 1px solid var(--glass-border);
+            color: var(--text-primary);
+            font-family: var(--font-body);
+            font-size: 0.88rem;
+            font-weight: 400;
+            outline: none;
+            transition: all 0.2s ease;
+            border-radius: var(--radius-pill);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+        .glass-input::placeholder { color: var(--text-quaternary); }
+        .glass-input:focus {
+            border-color: var(--accent-blue);
+            box-shadow: var(--shadow-glow);
+            background: rgba(255, 255, 255, 0.8);
+        }
+
+        .search-wrap {
+            position: relative;
+            flex: 1;
+            min-width: 200px;
+        }
+        .search-wrap svg {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 15px;
+            height: 15px;
+            color: var(--text-quaternary);
+            pointer-events: none;
+        }
+
+        .glass-select {
+            padding: 9px 30px 9px 12px;
+            background: rgba(255, 255, 255, 0.6);
+            border: 1px solid var(--glass-border);
+            color: var(--text-secondary);
+            font-family: var(--font-body);
+            font-size: 0.85rem;
+            font-weight: 500;
+            outline: none;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            appearance: none;
+            border-radius: var(--radius-pill);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23aeaeb2' fill='none' stroke-width='1.5'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 10px center;
+        }
+        .glass-select:focus {
+            border-color: var(--accent-blue);
+            box-shadow: var(--shadow-glow);
+            color: var(--text-primary);
+        }
+        .glass-select option {
+            background: #fff;
+            color: var(--text-primary);
+        }
+
+        /* --- Verb filter tags --- */
+        .verb-tags {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+            padding: 8px 0;
+        }
+        .verb-tag {
+            padding: 5px 14px;
+            font-family: var(--font-body);
+            font-size: 0.78rem;
+            font-weight: 600;
+            letter-spacing: 0.01em;
+            border: 1px solid var(--glass-border);
+            background: rgba(255, 255, 255, 0.4);
+            color: var(--text-tertiary);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border-radius: var(--radius-pill);
+        }
+        .verb-tag:hover {
+            background: rgba(255, 255, 255, 0.7);
+            color: var(--text-secondary);
+            border-color: rgba(0, 0, 0, 0.12);
+        }
+        .verb-tag-active {
+            background: rgba(0, 122, 255, 0.1) !important;
+            color: var(--accent-blue) !important;
+            border-color: rgba(0, 122, 255, 0.25) !important;
+        }
+
+        /* --- Presets --- */
+        .presets-row {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+            align-items: center;
+            padding: 4px 0;
+        }
+        .preset-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 3px 10px;
+            font-family: var(--font-body);
+            font-size: 0.7rem;
+            font-weight: 600;
+            border: 1px solid var(--glass-border);
+            background: rgba(255, 255, 255, 0.4);
+            color: var(--text-secondary);
+            border-radius: var(--radius-pill);
+        }
+        .preset-chip button { background: none; border: none; color: inherit; cursor: pointer; font-size: 0.75rem; }
+        .preset-chip button:hover { color: var(--accent-red); }
+        .save-preset-btn {
+            padding: 3px 12px;
+            font-family: var(--font-body);
+            font-size: 0.7rem;
+            font-weight: 600;
+            border: 1px dashed var(--text-quaternary);
+            background: transparent;
+            color: var(--text-tertiary);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border-radius: var(--radius-pill);
+        }
+        .save-preset-btn:hover { border-color: var(--accent-blue); color: var(--accent-blue); }
+
+        /* --- Recent searches dropdown --- */
+        .recent-dropdown {
+            display: none;
+            position: absolute;
+            left: 0; right: 0;
+            top: 100%;
+            margin-top: 6px;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: var(--glass-blur);
+            -webkit-backdrop-filter: var(--glass-blur);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-md);
+            z-index: 50;
+            max-height: 256px;
+            overflow-y: auto;
+            box-shadow: var(--shadow-lg);
+        }
+        .recent-dropdown button {
+            display: block;
+            width: 100%;
+            text-align: left;
+            padding: 8px 14px;
+            font-family: var(--font-body);
+            font-size: 0.85rem;
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+        .recent-dropdown button:first-child { border-radius: var(--radius-md) var(--radius-md) 0 0; }
+        .recent-dropdown button:last-child { border-radius: 0 0 var(--radius-md) var(--radius-md); }
+        .recent-dropdown button:hover { background: rgba(0, 122, 255, 0.06); color: var(--accent-blue); }
+        .recent-dropdown .clear-btn { font-size: 0.75rem; color: var(--text-tertiary); border-top: 1px solid var(--glass-border); }
+        .recent-dropdown .clear-btn:hover { color: var(--accent-red); }
+
+        /* --- Export menu --- */
+        .export-menu {
+            display: none;
+            position: absolute;
+            right: 0;
+            top: 100%;
+            margin-top: 6px;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: var(--glass-blur);
+            -webkit-backdrop-filter: var(--glass-blur);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-md);
+            z-index: 50;
+            min-width: 120px;
+            box-shadow: var(--shadow-lg);
+            overflow: hidden;
+        }
+        .export-menu button {
+            display: block;
+            width: 100%;
+            text-align: left;
+            padding: 8px 14px;
+            font-family: var(--font-body);
+            font-size: 0.85rem;
+            font-weight: 500;
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+        .export-menu button:hover { background: rgba(0, 122, 255, 0.06); color: var(--accent-blue); }
+
+        /* --- Main grid --- */
+        .main-content {
+            padding: 24px 0 80px;
+        }
+        .cards-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 10px;
+        }
+
+        /* --- Cmdlet cards --- */
+        .cmdlet-card {
+            position: relative;
+            background: var(--glass-bg);
+            backdrop-filter: var(--glass-blur);
+            -webkit-backdrop-filter: var(--glass-blur);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-md);
+            padding: 16px 20px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            flex-direction: column;
+            opacity: 0;
+            box-shadow: var(--shadow-sm), inset 0 1px 0 var(--glass-highlight);
+        }
+        .cmdlet-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md), inset 0 1px 0 var(--glass-highlight);
+            background: var(--glass-bg-heavy);
+        }
+
+        /* Verb accent indicators */
+        .cmdlet-card::before {
+            content: '';
+            position: absolute;
+            top: 14px;
+            left: 0;
+            width: 3px;
+            height: 24px;
+            border-radius: 0 3px 3px 0;
+            background: var(--text-quaternary);
+            transition: all 0.2s ease;
+        }
+        .cmdlet-card.verb-get::before, .cmdlet-card.verb-find::before { background: var(--accent-green); }
+        .cmdlet-card.verb-set::before, .cmdlet-card.verb-update::before { background: var(--accent-orange); }
+        .cmdlet-card.verb-new::before, .cmdlet-card.verb-confirm::before { background: var(--accent-blue); }
+        .cmdlet-card.verb-remove::before, .cmdlet-card.verb-clear::before { background: var(--accent-red); }
+        .cmdlet-card.verb-invoke::before { background: var(--accent-teal); }
+        .cmdlet-card.verb-add::before { background: var(--accent-purple); }
+        .cmdlet-card.verb-connect::before, .cmdlet-card.verb-disconnect::before { background: var(--text-tertiary); }
+
+        .card-name {
+            font-family: var(--font-mono);
+            font-size: 0.88rem;
+            font-weight: 500;
+            color: var(--text-primary);
+            word-break: break-all;
+            line-height: 1.3;
+        }
+        .card-name a {
+            color: var(--text-quaternary);
+            text-decoration: none;
+            margin-left: 4px;
+            transition: color 0.15s ease;
+        }
+        .card-name a:hover { color: var(--accent-blue); }
+        .card-name a svg { display: inline-block; width: 12px; height: 12px; vertical-align: -1px; }
+
+        .card-header {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 12px;
+            margin-bottom: 6px;
+        }
+
+        .card-badges {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            flex-shrink: 0;
+        }
+
+        .glass-badge {
+            font-family: var(--font-body);
+            font-size: 0.65rem;
+            font-weight: 600;
+            letter-spacing: 0.02em;
+            padding: 2px 8px;
+            border-radius: var(--radius-pill);
+            border: 1px solid;
+        }
+        .badge-api-stable { color: var(--accent-blue); border-color: rgba(0, 122, 255, 0.2); background: rgba(0, 122, 255, 0.08); }
+        .badge-api-beta { color: var(--accent-orange); border-color: rgba(255, 149, 0, 0.2); background: rgba(255, 149, 0, 0.08); }
+        .badge-category { color: var(--text-tertiary); border-color: var(--glass-border); background: rgba(255, 255, 255, 0.4); }
+        .badge-perm { color: var(--accent-indigo); border-color: rgba(88, 86, 214, 0.2); background: rgba(88, 86, 214, 0.06); }
+        .badge-examples { color: var(--accent-green); border-color: rgba(52, 199, 89, 0.2); background: rgba(52, 199, 89, 0.06); }
+
+        .card-desc {
+            font-family: var(--font-body);
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            line-height: 1.55;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            margin-bottom: 8px;
+        }
+        .card-expanded .card-desc { -webkit-line-clamp: unset; }
+
+        .card-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+            margin-bottom: 8px;
+        }
+
+        .card-detail { min-height: 0; }
+
+        .card-focused {
+            outline: 2px solid var(--accent-blue);
+            outline-offset: 2px;
+            box-shadow: var(--shadow-glow), var(--shadow-sm);
+        }
+
+        /* --- Detail sections --- */
+        .detail-syntax {
+            position: relative;
+            background: rgba(0, 0, 0, 0.03);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-sm);
+            padding: 14px 44px 14px 14px;
+            font-family: var(--font-mono);
+            font-size: 0.82rem;
+            color: var(--text-primary);
+            overflow-x: auto;
+            white-space: pre-wrap;
+            word-break: break-all;
+            line-height: 1.7;
+            margin-bottom: 10px;
+        }
+
+        .copy-btn {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            padding: 5px;
+            background: rgba(255, 255, 255, 0.6);
+            border: 1px solid var(--glass-border);
+            border-radius: 6px;
+            color: var(--text-tertiary);
+            cursor: pointer;
+            opacity: 0;
+            transition: all 0.15s ease;
+        }
+        .copy-btn:hover { color: var(--accent-blue); border-color: rgba(0, 122, 255, 0.2); background: rgba(0, 122, 255, 0.06); }
+        .detail-syntax:hover .copy-btn,
+        .example-block:hover .copy-btn,
+        .copy-btn:focus { opacity: 1; }
+
+        details { margin-bottom: 6px; }
+        details[open] > summary svg.chevron { transform: rotate(90deg); }
+        summary { list-style: none; cursor: pointer; }
         summary::-webkit-details-marker { display: none; }
-        select option { background: rgb(var(--surface-900)); color: rgb(var(--text-primary)); }
-        .verb-get, .verb-find { border-left-color: rgb(var(--accent-emerald)) !important; }
-        .verb-set, .verb-update { border-left-color: rgb(var(--accent-amber)) !important; }
-        .verb-new, .verb-confirm { border-left-color: rgb(var(--accent-sky)) !important; }
-        .verb-remove, .verb-clear { border-left-color: rgb(var(--accent-rose)) !important; }
-        .verb-invoke { border-left-color: rgb(var(--accent-cyan)) !important; }
-        .verb-add { border-left-color: rgb(var(--accent-indigo)) !important; }
-        .verb-connect, .verb-disconnect { border-left-color: rgb(var(--text-tertiary)) !important; }
-        .card-expanded .line-clamp-2 { -webkit-line-clamp: unset; }
-        .card-focused { outline: 2px solid rgb(var(--accent-sky)); outline-offset: 2px; }
-        .ps-comment { color: rgb(var(--text-ghost)); font-style: italic; }
-        .ps-string { color: rgb(var(--accent-amber)); }
-        .ps-variable { color: rgb(var(--accent-sky)); }
-        .ps-cmdlet { color: rgb(var(--accent-emerald)); }
-        .ps-type { color: rgb(var(--accent-violet)); }
-        .copy-btn { opacity: 0; transition: opacity 0.15s; }
-        .group:hover .copy-btn, .copy-btn:focus { opacity: 1; }
-        .alpha-index { scrollbar-width: none; }
-        .alpha-index::-webkit-scrollbar { display: none; }
-        .onboarding-tip { filter: drop-shadow(0 4px 12px rgba(0,0,0,0.3)); }
+
+        .detail-summary {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-family: var(--font-body);
+            font-size: 0.88rem;
+            font-weight: 500;
+            color: var(--text-tertiary);
+            padding: 4px 0;
+            transition: color 0.15s ease;
+        }
+        .detail-summary:hover { color: var(--text-secondary); }
+        .detail-summary svg { width: 12px; height: 12px; transition: transform 0.15s ease; }
+
+        .params-table {
+            width: 100%;
+            font-family: var(--font-mono);
+            font-size: 0.78rem;
+            border-collapse: collapse;
+            margin-top: 4px;
+        }
+        .params-table th {
+            text-align: left;
+            padding: 6px 14px 6px 0;
+            color: var(--text-tertiary);
+            font-weight: 500;
+            font-family: var(--font-body);
+            font-size: 0.7rem;
+            border-bottom: 1px solid var(--glass-border);
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+        }
+        .params-table td {
+            padding: 6px 14px 6px 0;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.04);
+        }
+        .params-table .param-name { color: var(--accent-blue); }
+        .params-table .param-type { color: var(--text-secondary); }
+        .params-table .param-req { color: var(--accent-orange); font-weight: 600; }
+        .params-table .param-opt { color: var(--text-quaternary); }
+
+        .example-block {
+            position: relative;
+            background: rgba(0, 0, 0, 0.03);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-sm);
+            padding: 12px 44px 12px 12px;
+            font-family: var(--font-mono);
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            overflow-x: auto;
+            white-space: pre-wrap;
+            word-break: break-all;
+            line-height: 1.6;
+            margin-bottom: 6px;
+        }
+
+        .perm-tag {
+            display: inline-block;
+            font-family: var(--font-body);
+            font-size: 0.75rem;
+            font-weight: 500;
+            padding: 3px 10px;
+            border: 1px solid rgba(88, 86, 214, 0.15);
+            color: var(--accent-indigo);
+            background: rgba(88, 86, 214, 0.05);
+            margin: 2px;
+            border-radius: var(--radius-pill);
+        }
+
+        .related-btn {
+            font-family: var(--font-mono);
+            font-size: 0.78rem;
+            padding: 4px 12px;
+            background: rgba(255, 255, 255, 0.5);
+            border: 1px solid var(--glass-border);
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.15s ease;
+            border-radius: var(--radius-pill);
+        }
+        .related-btn:hover { color: var(--accent-blue); border-color: rgba(0, 122, 255, 0.2); background: rgba(0, 122, 255, 0.06); }
+
+        /* --- PowerShell syntax highlighting (light bg) --- */
+        .ps-comment { color: var(--accent-green); font-style: italic; }
+        .ps-string { color: #c41a16; }
+        .ps-variable { color: var(--accent-blue); }
+        .ps-cmdlet { color: var(--accent-indigo); }
+        .ps-type { color: var(--accent-purple); }
+
+        /* --- Loading spinner --- */
+        .glass-spinner {
+            display: inline-block;
+            width: 28px;
+            height: 28px;
+            border: 2.5px solid var(--glass-border);
+            border-top-color: var(--accent-blue);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+        .glass-spinner-sm {
+            width: 16px;
+            height: 16px;
+            border-width: 2px;
+        }
+
+        .loading-text {
+            font-family: var(--font-body);
+            font-size: 0.82rem;
+            font-weight: 500;
+            color: var(--text-tertiary);
+            margin-top: 10px;
+        }
+
+        /* --- No results --- */
+        .no-results {
+            display: none;
+            text-align: center;
+            padding: 60px 20px;
+        }
+        .no-results h3 {
+            font-family: var(--font-display);
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+        }
+        .no-results p {
+            font-family: var(--font-body);
+            font-size: 0.82rem;
+            color: var(--text-tertiary);
+            margin-top: 6px;
+        }
+
+        /* --- Alpha nav --- */
+        .alpha-nav {
+            display: none;
+            position: fixed;
+            right: 8px;
+            top: 50%;
+            transform: translateY(-50%);
+            flex-direction: column;
+            align-items: center;
+            gap: 1px;
+            z-index: 30;
+            font-family: var(--font-body);
+            font-size: 0.58rem;
+            font-weight: 600;
+            background: var(--glass-bg-heavy);
+            backdrop-filter: var(--glass-blur);
+            -webkit-backdrop-filter: var(--glass-blur);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-lg);
+            padding: 6px 2px;
+            box-shadow: var(--shadow-md);
+        }
+        @media (min-width: 1024px) { .alpha-nav { display: flex; } }
+        .alpha-nav button {
+            padding: 2px 5px;
+            background: none;
+            border: none;
+            color: var(--text-tertiary);
+            cursor: pointer;
+            transition: color 0.1s ease;
+            border-radius: 4px;
+            line-height: 1.3;
+        }
+        .alpha-nav button:hover { color: var(--accent-blue); background: rgba(0, 122, 255, 0.08); }
+
+        /* --- Back to top --- */
+        .back-to-top {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            padding: 12px;
+            background: var(--glass-bg-heavy);
+            backdrop-filter: var(--glass-blur);
+            -webkit-backdrop-filter: var(--glass-blur);
+            border: 1px solid var(--glass-border);
+            color: var(--text-secondary);
+            cursor: pointer;
+            z-index: 30;
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.2s ease;
+            border-radius: 50%;
+            box-shadow: var(--shadow-md);
+        }
+        .back-to-top:hover { color: var(--accent-blue); }
+        .back-to-top.visible { opacity: 1; pointer-events: auto; }
+        .back-to-top svg { width: 18px; height: 18px; }
+
+        /* --- Responsive --- */
+        @media (max-width: 640px) {
+            .header-inner { flex-direction: column; align-items: flex-start; }
+            .filter-row { flex-direction: column; }
+            .glass-input, .search-wrap { min-width: 100%; }
+            .verb-tags { display: none; }
+        }
+
+        .hidden { display: none !important; }
     </style>
 </head>
-<body class="font-sans bg-surface-950 text-text-primary min-h-screen antialiased">
-    <!-- Sticky Header + Filters -->
-    <div class="sticky top-0 z-40">
-        <header class="relative z-10 backdrop-blur-xl bg-surface-950/80 border-b border-surface-700/50">
-            <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between max-sm:flex-col max-sm:gap-3">
-                <div>
-                    <h1 class="text-2xl font-bold bg-gradient-to-r from-accent-sky to-accent-indigo bg-clip-text text-transparent">MgGraph Index</h1>
-                    <p class="text-sm text-text-tertiary">Microsoft Graph cmdlet reference for IT Admins</p>
+<body>
+
+    <div class="header-bar">
+        <div class="app-container">
+            <div class="header-inner">
+                <div class="logo-block">
+                    <h1><span>MgGraph</span> Reference</h1>
+                    <div class="subtitle">Microsoft Graph PowerShell Cmdlet Index</div>
                 </div>
-                <div class="flex items-center gap-4 font-mono text-sm">
-                    <div class="text-center">
-                        <div class="text-xl font-semibold text-text-primary" id="totalCmdlets">0</div>
-                        <div class="text-xs text-text-ghost uppercase tracking-wider">Total</div>
+                <div class="stats-row">
+                    <div class="stat-block">
+                        <div class="stat-value" id="totalCmdlets">0</div>
+                        <div class="stat-label">Total</div>
                     </div>
-                    <div class="w-px h-8 bg-surface-700"></div>
-                    <div class="text-center">
-                        <div class="text-xl font-semibold text-text-primary" id="filteredCount">0</div>
-                        <div class="text-xs text-text-ghost uppercase tracking-wider">Showing</div>
+                    <div class="stat-divider"></div>
+                    <div class="stat-block">
+                        <div class="stat-value" id="filteredCount">0</div>
+                        <div class="stat-label">Showing</div>
                     </div>
-                    <div class="w-px h-8 bg-surface-700"></div>
-                    <div class="relative" id="exportWrap">
-                        <button onclick="toggleExportMenu()" class="p-2 rounded-lg border border-surface-700 text-text-tertiary hover:text-text-primary hover:border-surface-600 transition-colors" aria-label="Export results" title="Export filtered results">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                    <div class="stat-divider"></div>
+                    <div style="position:relative" id="exportWrap">
+                        <button onclick="toggleExportMenu()" class="icon-btn" aria-label="Export" title="Export filtered results">
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
                         </button>
-                        <div id="exportMenu" class="hidden absolute right-0 top-full mt-1 bg-surface-900 border border-surface-700 rounded-lg shadow-xl z-50 py-1 min-w-[120px]">
-                            <button onclick="exportResults('json')" class="block w-full text-left px-3 py-1.5 text-sm text-text-secondary hover:bg-surface-800 hover:text-text-primary transition-colors">JSON</button>
-                            <button onclick="exportResults('csv')" class="block w-full text-left px-3 py-1.5 text-sm text-text-secondary hover:bg-surface-800 hover:text-text-primary transition-colors">CSV</button>
+                        <div id="exportMenu" class="export-menu">
+                            <button onclick="exportResults('json')">JSON</button>
+                            <button onclick="exportResults('csv')">CSV</button>
                         </div>
                     </div>
-                    <button onclick="applyTheme(document.documentElement.classList.contains('dark')?'light':'dark')" class="p-2 rounded-lg border border-surface-700 text-text-tertiary hover:text-text-primary hover:border-surface-600 transition-colors" id="themeToggle" aria-label="Toggle theme">
-                        <svg id="themeIconSun" class="w-4 h-4 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
-                        <svg id="themeIconMoon" class="w-4 h-4 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>
-                    </button>
-                </div>
-            </div>
-        </header>
-        <div class="backdrop-blur-xl bg-surface-950/80 border-b border-surface-700/50">
-            <div class="max-w-7xl mx-auto px-6 py-3 space-y-3">
-                <div class="flex gap-3 max-sm:flex-col">
-                    <div class="relative flex-1 min-w-0">
-                        <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-text-ghost" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
-                        <input type="text" class="w-full pl-10 pr-4 py-2 bg-surface-900 border border-surface-700 text-text-primary rounded-lg text-sm outline-none transition-all placeholder:text-text-ghost focus:border-accent-sky focus:ring-1 focus:ring-accent-sky/30" id="searchInput" placeholder="Search cmdlets, descriptions, or examples...">
-                        <div id="recentSearches" class="hidden absolute left-0 right-0 top-full mt-1 bg-surface-900 border border-surface-700 rounded-lg shadow-xl z-50 py-1 max-h-64 overflow-y-auto"></div>
-                    </div>
-                    <select class="px-4 py-2 bg-surface-900 border border-surface-700 text-text-primary rounded-lg text-sm cursor-pointer outline-none transition-all focus:border-accent-sky focus:ring-1 focus:ring-accent-sky/30" id="categoryFilter" aria-label="Category filter">
-                        <option value="">All Categories</option>
-                    </select>
-                    <select class="px-4 py-2 bg-surface-900 border border-surface-700 text-text-primary rounded-lg text-sm cursor-pointer outline-none transition-all focus:border-accent-sky focus:ring-1 focus:ring-accent-sky/30" id="moduleFilter" aria-label="Module filter">
-                        <option value="">All Modules</option>
-                    </select>
-                    <select class="px-4 py-2 bg-surface-900 border border-surface-700 text-text-primary rounded-lg text-sm cursor-pointer outline-none transition-all focus:border-accent-sky focus:ring-1 focus:ring-accent-sky/30" id="permissionFilter" aria-label="Permission filter">
-                        <option value="">All Permissions</option>
-                    </select>
-                    <select class="px-4 py-2 bg-surface-900 border border-surface-700 text-text-primary rounded-lg text-sm cursor-pointer outline-none transition-all focus:border-accent-sky focus:ring-1 focus:ring-accent-sky/30" id="apiVersionFilter" aria-label="API version filter">
-                        <option value="">All Versions</option>
-                        <option value="v1.0">v1.0</option>
-                        <option value="beta">beta</option>
-                    </select>
-                    <select class="px-4 py-2 bg-surface-900 border border-surface-700 text-text-primary rounded-lg text-sm cursor-pointer outline-none transition-all focus:border-accent-sky focus:ring-1 focus:ring-accent-sky/30" id="sortSelect" aria-label="Sort by">
-                        <option value="alpha">A-Z</option>
-                        <option value="category">Category</option>
-                        <option value="permissions">Permissions (most)</option>
-                        <option value="examples">Examples (most)</option>
-                    </select>
-                </div>
-                <div class="flex items-center gap-2">
-                    <button id="mobileFilterToggle" class="sm:hidden px-3 py-1.5 text-sm font-medium rounded-full border border-surface-700 text-text-tertiary hover:text-text-secondary transition-colors" onclick="toggleMobileFilters()">Filters <span id="filterBadge" class="hidden ml-1 px-1.5 py-0.5 text-xs bg-accent-sky/20 text-accent-sky rounded-full"></span></button>
-                    <div class="hidden sm:flex gap-1.5 flex-wrap" id="verbFilters"></div>
-                </div>
-                <div class="flex items-center gap-2 flex-wrap" id="presetsBar">
-                    <div class="flex gap-1.5 flex-wrap" id="presetsList"></div>
-                    <button onclick="savePreset()" class="px-2.5 py-1 text-xs font-medium rounded-full border border-surface-700 text-text-ghost hover:text-text-secondary hover:border-surface-600 transition-colors">+ Save preset</button>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Main Content -->
-    <main class="max-w-7xl mx-auto px-6 py-6">
-        <div class="grid grid-cols-1 gap-4" id="cmdletsGrid">
-            <div class="col-span-full text-center py-16 px-5">
-                <div class="inline-block w-8 h-8 border-2 border-surface-700 border-t-accent-sky rounded-full animate-spin"></div>
-                <div class="text-text-secondary mt-3 text-sm">Loading cmdlets...</div>
+    <div class="filter-bar">
+        <div class="app-container">
+            <div class="filter-row">
+                <div class="search-wrap">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+                    <input type="text" class="glass-input" id="searchInput" placeholder="Search cmdlets, descriptions...">
+                    <div id="recentSearches" class="recent-dropdown"></div>
+                </div>
+                <select class="glass-select" id="categoryFilter" aria-label="Category"><option value="">All Categories</option></select>
+                <select class="glass-select" id="moduleFilter" aria-label="Module"><option value="">All Modules</option></select>
+                <select class="glass-select" id="permissionFilter" aria-label="Permission"><option value="">All Permissions</option></select>
+                <select class="glass-select" id="apiVersionFilter" aria-label="API version">
+                    <option value="">All Versions</option>
+                    <option value="v1.0">v1.0 Stable</option>
+                    <option value="beta">Beta</option>
+                </select>
+                <select class="glass-select" id="sortSelect" aria-label="Sort">
+                    <option value="alpha">Sort: A-Z</option>
+                    <option value="category">Sort: Category</option>
+                    <option value="permissions">Sort: Permissions</option>
+                    <option value="examples">Sort: Examples</option>
+                </select>
+            </div>
+            <div class="verb-tags" id="verbFilters"></div>
+            <div class="presets-row" id="presetsBar">
+                <div id="presetsList" style="display:flex;gap:6px;flex-wrap:wrap"></div>
+                <button onclick="savePreset()" class="save-preset-btn">+ Save Preset</button>
             </div>
         </div>
-        <div class="hidden text-center py-16 px-5" id="noResults">
-            <h3 class="text-text-secondary text-lg">No cmdlets found</h3>
-            <p class="text-text-ghost mt-2 text-sm">Try adjusting your search terms or filters</p>
-        </div>
-        <div id="scrollSentinel" class="h-1"></div>
-    </main>
+    </div>
 
-    <!-- Jump-to-letter sidebar -->
-    <nav id="alphaIndex" class="hidden lg:flex fixed right-2 top-1/2 -translate-y-1/2 flex-col items-center gap-0.5 text-xs font-mono text-text-ghost alpha-index z-30"></nav>
+    <div class="app-container">
+        <main class="main-content">
+            <div class="cards-grid" id="cmdletsGrid">
+                <div style="text-align:center;padding:60px 20px">
+                    <div class="glass-spinner"></div>
+                    <div class="loading-text">Loading cmdlets...</div>
+                </div>
+            </div>
+            <div class="no-results" id="noResults">
+                <h3>No Matches Found</h3>
+                <p>Try adjusting your search or filters</p>
+            </div>
+            <div id="scrollSentinel" style="height:1px"></div>
+        </main>
+    </div>
 
-    <!-- Back-to-top button -->
-    <button id="backToTop" class="fixed bottom-6 right-6 p-3 rounded-full bg-surface-800 border border-surface-700 text-text-secondary hover:text-text-primary hover:border-surface-600 shadow-lg transition-all opacity-0 pointer-events-none z-30" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Back to top">
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18"/></svg>
+    <nav class="alpha-nav" id="alphaIndex"></nav>
+
+    <button class="back-to-top" id="backToTop" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Back to top">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18"/></svg>
     </button>
-
-    <!-- Onboarding tooltip container -->
-    <div id="onboardingOverlay" class="hidden fixed inset-0 z-50 pointer-events-none">
-        <div id="onboardingTip" class="onboarding-tip absolute bg-surface-800 border border-accent-sky/30 rounded-lg p-4 max-w-xs pointer-events-auto shadow-xl">
-            <p id="tipText" class="text-sm text-text-primary mb-3"></p>
-            <div class="flex gap-2 justify-end">
-                <button onclick="dismissOnboarding()" class="px-3 py-1 text-xs text-text-tertiary hover:text-text-secondary transition-colors">Dismiss</button>
-                <button onclick="showNextTip()" class="px-3 py-1 text-xs bg-accent-sky/20 text-accent-sky rounded-md hover:bg-accent-sky/30 transition-colors">Next</button>
-            </div>
-        </div>
-    </div>
 
     <script>
         let cmdlets = [];
@@ -205,45 +869,34 @@
         let renderedCount = 0;
         const CHUNK_SIZE = 50;
         let scrollObserver = null;
-        let currentTheme = document.documentElement.classList.contains('dark') ? 'dark' : 'light';
         let focusedCardIndex = -1;
         let recentSearches = JSON.parse(localStorage.getItem('recentSearches') || '[]');
         let nounMap = {};
         let currentSort = 'alpha';
         let savedPresets = JSON.parse(localStorage.getItem('savedPresets') || '[]');
-        let hasSeenOnboarding = localStorage.getItem('hasSeenOnboarding') === 'true';
-        let onboardingStep = 0;
         const moduleDetailCache = new Map();
+        const permissionIndex = new Map();
 
         function debounce(fn, ms) {
             let id;
             return (...args) => { clearTimeout(id); id = setTimeout(() => fn(...args), ms); };
         }
 
-        // -- HTML escaping --
         function escapeHtml(str) {
             if (!str) return '';
-            return String(str)
-                .replace(/&/g, '&amp;')
-                .replace(/</g, '&lt;')
-                .replace(/>/g, '&gt;')
-                .replace(/"/g, '&quot;')
-                .replace(/'/g, '&#39;');
+            return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
         }
 
-        // -- Verb extraction --
         function getVerb(name) {
             const idx = name.indexOf('-');
             return idx > 0 ? name.substring(0, idx) : '';
         }
 
-        // -- Load manifest.json, fallback to cmdlets.json --
         async function loadCmdlets() {
             try {
                 const response = await fetch('data/manifest.json');
                 if (!response.ok) throw new Error('HTTP ' + response.status);
                 const data = await response.json();
-
                 cmdlets = data.map(c => ({
                     name: c.name || 'Unknown Cmdlet',
                     verb: c.verb || getVerb(c.name || ''),
@@ -254,13 +907,8 @@
                     permissionCount: c.permissionCount || 0,
                     hasExamples: !!c.hasExamples,
                 }));
-
-                buildNounMap();
-                filteredCmdlets = [...cmdlets];
-                populateFilters();
-                restoreState();
-                updateThemeIcons();
-                if (!hasSeenOnboarding) setTimeout(showNextTip, 800);
+                buildNounMap(); filteredCmdlets = [...cmdlets]; populateFilters(); restoreState();
+                loadAllModuleDetails();
             } catch (e) {
                 console.warn('Manifest load failed, trying cmdlets.json:', e.message);
                 try {
@@ -268,21 +916,16 @@
                     if (!response.ok) throw new Error('HTTP ' + response.status);
                     const data = await response.json();
                     const arr = Array.isArray(data) ? data : (data.cmdlets || [data]);
-
-                    // Build module detail cache from flat file so card expand works
                     arr.forEach(function(c) {
                         var mod = c.module || '';
                         if (!mod) return;
-                        if (!moduleDetailCache.has(mod)) {
-                            moduleDetailCache.set(mod, { module: mod, cmdlets: {} });
-                        }
+                        if (!moduleDetailCache.has(mod)) moduleDetailCache.set(mod, { module: mod, cmdlets: {} });
                         moduleDetailCache.get(mod).cmdlets[c.name] = {
                             syntax: c.syntax || '',
                             examples: Array.isArray(c.examples) ? c.examples : (c.examples ? [c.examples] : []),
                             permissions: Array.isArray(c.permissions) ? c.permissions : (c.permissions ? [c.permissions] : []),
                         };
                     });
-
                     cmdlets = arr.map(c => ({
                         name: c.name || 'Unknown Cmdlet',
                         verb: c.verb || getVerb(c.name || ''),
@@ -293,23 +936,14 @@
                         permissionCount: Array.isArray(c.permissions) ? c.permissions.length : 0,
                         hasExamples: Array.isArray(c.examples) && c.examples.length > 0,
                     }));
-
-                    buildNounMap();
-                    filteredCmdlets = [...cmdlets];
-                    populateFilters();
-                    restoreState();
-                    updateThemeIcons();
-                    if (!hasSeenOnboarding) setTimeout(showNextTip, 800);
+                    buildNounMap(); filteredCmdlets = [...cmdlets];
+                    buildPermissionIndex(); populateFilters(); populatePermissionFilter(); restoreState();
                 } catch (e2) {
-                    document.getElementById('cmdletsGrid').innerHTML =
-                        '<div class="col-span-full text-center py-16 px-5">' +
-                        '<h3 class="text-accent-rose text-lg">Failed to load cmdlet data</h3>' +
-                        '<p class="text-text-ghost mt-2 text-sm">Could not fetch manifest.json or cmdlets.json. Run the extraction script first.</p></div>';
+                    document.getElementById('cmdletsGrid').innerHTML = '<div style="text-align:center;padding:60px 20px"><h3 style="font-family:var(--font-display);font-size:1rem;font-weight:600;color:var(--accent-red)">Unable to Load Data</h3><p style="color:var(--text-tertiary);font-family:var(--font-body);font-size:0.82rem;margin-top:8px">Could not connect to data source. Run the extraction script first.</p></div>';
                 }
             }
         }
 
-        // -- Lazy load module detail --
         async function loadModuleDetail(moduleName) {
             if (moduleDetailCache.has(moduleName)) return moduleDetailCache.get(moduleName);
             try {
@@ -319,139 +953,137 @@
                 moduleDetailCache.set(moduleName, data);
                 return data;
             } catch (e) {
-                console.warn('Failed to load module detail for ' + moduleName + ':', e.message);
+                console.warn('Module detail fetch failed for ' + moduleName + ':', e.message);
                 return null;
             }
         }
 
-        // -- Populate detail into an expanded card --
+        function buildPermissionIndex() {
+            permissionIndex.clear();
+            moduleDetailCache.forEach(function(modData) {
+                if (!modData || !modData.cmdlets) return;
+                Object.keys(modData.cmdlets).forEach(function(cmdName) {
+                    var perms = modData.cmdlets[cmdName].permissions;
+                    if (!Array.isArray(perms)) return;
+                    perms.forEach(function(p) {
+                        if (!permissionIndex.has(p)) permissionIndex.set(p, new Set());
+                        permissionIndex.get(p).add(cmdName);
+                    });
+                });
+            });
+        }
+
+        function populatePermissionFilter() {
+            var select = document.getElementById('permissionFilter');
+            var currentVal = select.value;
+            var perms = [...permissionIndex.keys()].sort();
+            select.innerHTML = '<option value="">All Permissions</option>' +
+                perms.map(function(p) {
+                    return '<option value="' + escapeHtml(p) + '">' + escapeHtml(p) + ' (' + permissionIndex.get(p).size + ')</option>';
+                }).join('');
+            if (currentVal && perms.includes(currentVal)) select.value = currentVal;
+        }
+
+        async function loadAllModuleDetails() {
+            var modules = [...new Set(cmdlets.map(function(c) { return c.module; }).filter(function(m) { return m; }))];
+            await Promise.all(modules.map(function(m) { return loadModuleDetail(m); }));
+            buildPermissionIndex();
+            populatePermissionFilter();
+        }
+
         async function populateCardDetail(card, cmdletName, moduleName) {
             const detailContainer = card.querySelector('.card-detail');
             if (!detailContainer || detailContainer.dataset.loaded === 'true') return;
-
-            detailContainer.innerHTML = '<div class="text-center py-4"><div class="inline-block w-5 h-5 border-2 border-surface-700 border-t-accent-sky rounded-full animate-spin"></div><div class="text-text-ghost text-xs mt-1">Loading details...</div></div>';
-
+            detailContainer.innerHTML = '<div style="text-align:center;padding:12px"><div class="glass-spinner glass-spinner-sm" style="display:inline-block"></div><div style="font-family:var(--font-body);font-size:0.7rem;color:var(--text-tertiary);margin-top:4px">Loading details...</div></div>';
             const moduleData = await loadModuleDetail(moduleName);
             if (!moduleData || !moduleData.cmdlets || !moduleData.cmdlets[cmdletName]) {
-                detailContainer.innerHTML = '<p class="text-text-ghost text-xs py-2">Detail not available.</p>';
+                detailContainer.innerHTML = '<p style="font-family:var(--font-body);font-size:0.78rem;color:var(--text-tertiary);padding:8px 0">No additional details available</p>';
                 detailContainer.dataset.loaded = 'true';
                 return;
             }
-
             const detail = moduleData.cmdlets[cmdletName];
             let html = '';
 
-            // Syntax
             if (detail.syntax) {
-                html += '<div class="relative group mb-3"><div class="bg-surface-800 rounded-lg p-3 pr-10 text-xs font-mono text-accent-emerald overflow-x-auto whitespace-pre-wrap break-all leading-relaxed">' + escapeHtml(detail.syntax) + '</div>' +
-                    '<button class="copy-btn absolute top-2 right-2 p-1.5 rounded-md bg-surface-700/50 hover:bg-surface-700 text-text-ghost hover:text-text-primary transition-all" data-copy-syntax="1" title="Copy syntax" onclick="event.stopPropagation()"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg></button></div>';
+                html += '<div class="detail-syntax">' + escapeHtml(detail.syntax) +
+                    '<button class="copy-btn" data-copy-syntax="1" title="Copy" onclick="event.stopPropagation()"><svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg></button></div>';
             }
 
-            // Parameters
             if (detail.syntax) {
                 const params = parseParameters(detail.syntax);
                 if (params.length > 0) {
-                    html += '<details class="mb-2" onclick="event.stopPropagation()">' +
-                        '<summary class="flex items-center gap-2 cursor-pointer text-sm text-text-tertiary hover:text-text-secondary transition-colors py-1">' +
-                        '<svg class="w-3.5 h-3.5 transition-transform duration-150" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>' +
-                        '<span>' + params.length + ' parameter' + (params.length > 1 ? 's' : '') + '</span></summary>' +
-                        '<div class="mt-1 overflow-x-auto"><table class="w-full text-xs"><thead><tr class="text-text-ghost border-b border-surface-700">' +
-                        '<th class="text-left py-1 pr-4 font-medium">Parameter</th><th class="text-left py-1 pr-4 font-medium">Type</th><th class="text-left py-1 font-medium">Required</th></tr></thead><tbody>' +
-                        params.map(function(p) { return '<tr class="border-b border-surface-800"><td class="py-1 pr-4 font-mono text-accent-sky">' + escapeHtml(p.name) + '</td><td class="py-1 pr-4 text-text-secondary">' + escapeHtml(p.type) + '</td><td class="py-1 ' + (p.required ? 'text-accent-amber' : 'text-text-ghost') + '">' + (p.required ? 'Yes' : 'No') + '</td></tr>'; }).join('') +
-                        '</tbody></table></div></details>';
+                    html += '<details onclick="event.stopPropagation()"><summary class="detail-summary"><svg class="chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg><span>' + params.length + ' parameter' + (params.length > 1 ? 's' : '') + '</span></summary>' +
+                        '<table class="params-table"><thead><tr><th>Parameter</th><th>Type</th><th>Required</th></tr></thead><tbody>' +
+                        params.map(function(p) {
+                            return '<tr><td class="param-name">' + escapeHtml(p.name) + '</td><td class="param-type">' + escapeHtml(p.type) + '</td><td class="' + (p.required ? 'param-req' : 'param-opt') + '">' + (p.required ? 'Yes' : 'No') + '</td></tr>';
+                        }).join('') + '</tbody></table></details>';
                 }
             }
 
-            // Examples
             if (detail.examples && detail.examples.length > 0) {
-                html += '<details class="group" onclick="event.stopPropagation()">' +
-                    '<summary class="flex items-center gap-2 cursor-pointer text-sm text-text-tertiary hover:text-text-secondary transition-colors py-1">' +
-                    '<svg class="w-3.5 h-3.5 transition-transform duration-150" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>' +
-                    '<span>' + detail.examples.length + ' example' + (detail.examples.length > 1 ? 's' : '') + '</span></summary>' +
-                    '<div class="mt-2 space-y-2">' +
+                html += '<details onclick="event.stopPropagation()"><summary class="detail-summary"><svg class="chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg><span>' + detail.examples.length + ' example' + (detail.examples.length > 1 ? 's' : '') + '</span></summary><div style="margin-top:6px">' +
                     detail.examples.map(function(ex) {
-                        return '<div class="relative group"><pre class="bg-surface-800 rounded-lg p-3 pr-10 text-xs text-text-secondary overflow-x-auto whitespace-pre-wrap break-all leading-relaxed">' + highlightPowerShell(escapeHtml(ex)) + '</pre>' +
-                            '<button class="copy-btn absolute top-2 right-2 p-1.5 rounded-md bg-surface-700/50 hover:bg-surface-700 text-text-ghost hover:text-text-primary transition-all" data-copy-ex="1" title="Copy" onclick="event.stopPropagation()"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg></button></div>';
-                    }).join('') +
-                    '</div></details>';
+                        return '<div class="example-block">' + highlightPowerShell(escapeHtml(ex)) +
+                            '<button class="copy-btn" data-copy-ex="1" title="Copy" onclick="event.stopPropagation()"><svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg></button></div>';
+                    }).join('') + '</div></details>';
             }
 
-            // Permissions
             if (detail.permissions && detail.permissions.length > 0) {
-                html += '<div class="flex flex-wrap gap-1.5 mt-auto pt-3">' +
-                    detail.permissions.map(function(p) {
-                        return '<span class="inline-block bg-accent-indigo/10 border border-accent-indigo/20 text-accent-indigo px-2 py-0.5 text-xs rounded-md font-mono">' + escapeHtml(p) + '</span>';
-                    }).join('') + '</div>';
+                html += '<div style="display:flex;flex-wrap:wrap;gap:4px;margin-top:8px">' +
+                    detail.permissions.map(function(p) { return '<span class="perm-tag">' + escapeHtml(p) + '</span>'; }).join('') + '</div>';
             }
 
-            // Related cmdlets
             const noun = cmdletName.indexOf('-') > 0 ? cmdletName.substring(cmdletName.indexOf('-') + 1) : '';
             const related = noun && nounMap[noun] ? nounMap[noun].filter(function(n) { return n !== cmdletName; }) : [];
             if (related.length > 0) {
-                html += '<div class="flex flex-wrap gap-1.5 mt-2">' +
+                html += '<div style="display:flex;flex-wrap:wrap;gap:4px;margin-top:6px">' +
                     related.slice(0, 5).map(function(r) {
-                        return '<button class="text-xs px-2 py-0.5 rounded-md bg-surface-800 text-text-tertiary hover:text-accent-sky hover:bg-surface-700 transition-colors font-mono" onclick="event.stopPropagation();document.getElementById(\'searchInput\').value=\'' + escapeHtml(r) + '\';filterCmdlets()">' + escapeHtml(r) + '</button>';
+                        return '<button class="related-btn" onclick="event.stopPropagation();document.getElementById(\'searchInput\').value=\'' + escapeHtml(r) + '\';filterCmdlets()">' + escapeHtml(r) + '</button>';
                     }).join('') +
-                    (related.length > 5 ? '<span class="text-xs text-text-ghost px-1 self-center">+' + (related.length - 5) + ' more</span>' : '') +
-                    '</div>';
+                    (related.length > 5 ? '<span style="font-family:var(--font-body);font-size:0.7rem;color:var(--text-tertiary);align-self:center;padding:0 4px">+' + (related.length - 5) + ' more</span>' : '') + '</div>';
             }
 
             detailContainer.innerHTML = html;
             detailContainer.dataset.loaded = 'true';
-
-            // Auto-open details if card is expanded
             if (card.classList.contains('card-expanded')) {
                 card.querySelectorAll('.card-detail details').forEach(function(d) { d.open = true; });
             }
         }
 
-        // -- Dynamically build filter dropdowns and verb buttons --
-        const tagBase = 'px-3 py-1.5 text-sm font-medium rounded-full border transition-all duration-150 cursor-pointer select-none';
-        const tagInactive = 'bg-transparent text-text-tertiary border-surface-700 hover:text-text-secondary hover:border-surface-600 hover:bg-surface-800/50';
-        const tagActive = 'bg-accent-sky/15 text-accent-sky border-accent-sky/30';
+        const tagBase = 'verb-tag';
+        const tagInactive = '';
+        const tagActive = 'verb-tag-active';
 
         function populateFilters() {
             const catSelect = document.getElementById('categoryFilter');
-            const categories = [...new Set(cmdlets.map(function(c) { return c.category; }))].sort();
-            catSelect.innerHTML = '<option value="">All Categories</option>' +
-                categories.map(function(c) { return '<option value="' + escapeHtml(c) + '">' + escapeHtml(c) + '</option>'; }).join('');
+            const categories = [...new Set(cmdlets.map(c => c.category))].sort();
+            catSelect.innerHTML = '<option value="">All Categories</option>' + categories.map(c => '<option value="' + escapeHtml(c) + '">' + escapeHtml(c) + '</option>').join('');
 
             const modSelect = document.getElementById('moduleFilter');
-            const modules = [...new Set(cmdlets.map(function(c) { return c.module; }).filter(function(m) { return m; }))].sort();
-            modSelect.innerHTML = '<option value="">All Modules</option>' +
-                modules.map(function(m) {
-                    const short = m.replace(/^Microsoft\.Graph\./, '');
-                    return '<option value="' + escapeHtml(m) + '">' + escapeHtml(short) + '</option>';
-                }).join('');
+            const modules = [...new Set(cmdlets.map(c => c.module).filter(m => m))].sort();
+            modSelect.innerHTML = '<option value="">All Modules</option>' + modules.map(m => {
+                const short = m.replace(/^Microsoft\.Graph\./, '');
+                return '<option value="' + escapeHtml(m) + '">' + escapeHtml(short) + '</option>';
+            }).join('');
 
-            // Permission filter is not populated from manifest (no per-cmdlet permissions).
-            // It will remain with "All Permissions" only until detail files are loaded.
-            // Users can still filter by permission count via sort.
+            const verbs = [...new Set(cmdlets.map(c => c.verb).filter(v => v))].sort();
+            const vc = document.getElementById('verbFilters');
+            vc.innerHTML = '<button class="verb-tag verb-tag-active" data-filter="all">All</button>' +
+                verbs.map(v => '<button class="verb-tag" data-filter="' + escapeHtml(v) + '">' + escapeHtml(v.charAt(0).toUpperCase() + v.slice(1).toLowerCase()) + '</button>').join('');
 
-            const verbs = [...new Set(cmdlets.map(function(c) { return c.verb; }).filter(function(v) { return v; }))].sort();
-            const verbContainer = document.getElementById('verbFilters');
-            verbContainer.innerHTML = '<button class="' + tagBase + ' ' + tagActive + '" data-filter="all">All</button>' +
-                verbs.map(function(v) { return '<button class="' + tagBase + ' ' + tagInactive + '" data-filter="' + escapeHtml(v) + '">' + escapeHtml(v) + '</button>'; }).join('');
-
-            verbContainer.querySelectorAll('button').forEach(function(tag) {
+            vc.querySelectorAll('button').forEach(function(tag) {
                 tag.addEventListener('click', function() {
                     var filter = this.dataset.filter;
-                    if (filter === 'all') {
-                        activeVerbs.clear();
-                    } else if (activeVerbs.has(filter)) {
-                        activeVerbs.delete(filter);
-                    } else {
-                        activeVerbs.add(filter);
-                    }
+                    if (filter === 'all') { activeVerbs.clear(); }
+                    else if (activeVerbs.has(filter)) { activeVerbs.delete(filter); }
+                    else { activeVerbs.add(filter); }
                     refreshVerbButtonStyles();
                     filterCmdlets();
                 });
             });
-
             renderPresets();
         }
 
-        // -- Filter cmdlets --
         function filterCmdlets() {
             var searchTerm = document.getElementById('searchInput').value.trim();
             var searchLower = searchTerm.toLowerCase();
@@ -460,161 +1092,98 @@
             var permVal = document.getElementById('permissionFilter').value;
             var apiVal = document.getElementById('apiVersionFilter').value;
             currentSort = document.getElementById('sortSelect').value;
-
             if (searchTerm.length >= 2) saveRecentSearch(searchTerm);
 
             filteredCmdlets = cmdlets.filter(function(c) {
                 if (searchLower) {
                     var nameRaw = fuzzyScore(searchLower, c.name);
                     var nameScore = nameRaw * (1 + searchLower.length / c.name.length);
-                    c._score = nameScore +
-                        fuzzyScore(searchLower, c.description) * 0.3 +
-                        fuzzyScore(searchLower, c.category) * 0.2;
+                    c._score = nameScore + fuzzyScore(searchLower, c.description) * 0.3 + fuzzyScore(searchLower, c.category) * 0.2;
                     if (c._score < searchLower.length * 2) return false;
-                } else {
-                    c._score = 0;
-                }
-                var matchesCat = !categoryVal || c.category === categoryVal;
-                var matchesMod = !moduleVal || c.module === moduleVal;
-                var matchesPerm = true; // Permission filter not available in manifest-only mode
-                var matchesApi = !apiVal || c.apiVersion === apiVal;
-                var matchesVerb = activeVerbs.size === 0 || activeVerbs.has(c.verb);
-                return matchesCat && matchesMod && matchesPerm && matchesApi && matchesVerb;
+                } else { c._score = 0; }
+                var matchesPerm = !permVal || (permissionIndex.has(permVal) && permissionIndex.get(permVal).has(c.name));
+                return (!categoryVal || c.category === categoryVal) &&
+                    (!moduleVal || c.module === moduleVal) &&
+                    matchesPerm &&
+                    (!apiVal || c.apiVersion === apiVal) &&
+                    (activeVerbs.size === 0 || activeVerbs.has(c.verb));
             });
 
-            if (searchLower) {
-                filteredCmdlets.sort(function(a, b) { return b._score - a._score; });
-            } else {
+            if (searchLower) { filteredCmdlets.sort((a, b) => b._score - a._score); }
+            else {
                 switch (currentSort) {
-                    case 'category': filteredCmdlets.sort(function(a, b) { return a.category.localeCompare(b.category) || a.name.localeCompare(b.name); }); break;
-                    case 'permissions': filteredCmdlets.sort(function(a, b) { return b.permissionCount - a.permissionCount || a.name.localeCompare(b.name); }); break;
-                    case 'examples': filteredCmdlets.sort(function(a, b) { return (b.hasExamples ? 1 : 0) - (a.hasExamples ? 1 : 0) || a.name.localeCompare(b.name); }); break;
-                    default: filteredCmdlets.sort(function(a, b) { return a.name.localeCompare(b.name); });
+                    case 'category': filteredCmdlets.sort((a, b) => a.category.localeCompare(b.category) || a.name.localeCompare(b.name)); break;
+                    case 'permissions': filteredCmdlets.sort((a, b) => b.permissionCount - a.permissionCount || a.name.localeCompare(b.name)); break;
+                    case 'examples': filteredCmdlets.sort((a, b) => (b.hasExamples?1:0) - (a.hasExamples?1:0) || a.name.localeCompare(b.name)); break;
+                    default: filteredCmdlets.sort((a, b) => a.name.localeCompare(b.name));
                 }
             }
-
             focusedCardIndex = -1;
-            renderCmdlets();
-            updateStats();
-            serializeState();
-            buildAlphaIndex();
-            updateFilterBadge();
+            renderCmdlets(); updateStats(); serializeState(); buildAlphaIndex(); updateFilterBadge();
         }
 
-        // -- Build card HTML for a single cmdlet (summary from manifest) --
         function buildCardHtml(c, animDelay) {
             var verb = (c.verb || getVerb(c.name)).toLowerCase();
             var learnUrl = getLearnUrl(c);
-            var learnLink = learnUrl ? ' <a href="' + learnUrl + '" target="_blank" rel="noopener" class="text-text-ghost hover:text-accent-sky transition-colors" title="Microsoft Learn docs" onclick="event.stopPropagation()"><svg class="w-3.5 h-3.5 inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg></a>' : '';
+            var learnLink = learnUrl ? ' <a href="' + learnUrl + '" target="_blank" rel="noopener" title="MS Learn" onclick="event.stopPropagation()"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg></a>' : '';
+            var apiClass = c.apiVersion === 'beta' ? 'badge-api-beta' : 'badge-api-stable';
+            var apiBadge = '<span class="glass-badge ' + apiClass + '">' + escapeHtml(c.apiVersion || 'v1.0') + '</span>';
+            var permBadge = c.permissionCount > 0 ? '<span class="glass-badge badge-perm">' + c.permissionCount + ' perm' + (c.permissionCount > 1 ? 's' : '') + '</span>' : '';
+            var exBadge = c.hasExamples ? '<span class="glass-badge badge-examples">Examples</span>' : '';
 
-            // API version badge
-            var apiClass = c.apiVersion === 'beta' ? 'bg-accent-amber/10 text-accent-amber border-accent-amber/20' : 'bg-accent-sky/10 text-accent-sky border-accent-sky/20';
-            var apiBadge = '<span class="shrink-0 text-xs px-1.5 py-0.5 rounded-md border ' + apiClass + '">' + escapeHtml(c.apiVersion || 'v1.0') + '</span>';
-
-            // Permission count badge
-            var permBadge = c.permissionCount > 0
-                ? '<span class="inline-block bg-accent-indigo/10 border border-accent-indigo/20 text-accent-indigo px-1.5 py-0.5 text-xs rounded-md">' + c.permissionCount + ' perm' + (c.permissionCount > 1 ? 's' : '') + '</span>'
-                : '';
-
-            // Examples indicator
-            var exBadge = c.hasExamples
-                ? '<span class="inline-block bg-accent-emerald/10 border border-accent-emerald/20 text-accent-emerald px-1.5 py-0.5 text-xs rounded-md">examples</span>'
-                : '';
-
-            return '<div class="cmdlet-card bg-surface-900 border border-surface-700/50 rounded-xl p-5 transition-all duration-200 flex flex-col hover:border-surface-600 hover:ring-1 hover:ring-accent-sky/10 border-l-[3px] opacity-0 animate-fade-in verb-' + escapeHtml(verb) + ' cursor-pointer" style="animation-delay: ' + animDelay + 'ms" data-name="' + escapeHtml(c.name) + '" data-module="' + escapeHtml(c.module) + '">' +
-                '<div class="flex items-start justify-between gap-3 mb-2">' +
-                '<div class="font-mono text-accent-sky font-medium break-all leading-snug">' + escapeHtml(c.name) + learnLink + '</div>' +
-                '<div class="flex items-center gap-1.5 shrink-0">' + apiBadge +
-                '<span class="bg-surface-800 text-text-tertiary text-xs px-2 py-0.5 rounded-md">' + escapeHtml(c.category) + '</span></div></div>' +
-                '<p class="text-sm text-text-secondary line-clamp-2 mb-3">' + escapeHtml(c.description) + '</p>' +
-                '<div class="flex flex-wrap gap-1.5 mb-3">' + permBadge + exBadge + '</div>' +
-                '<div class="card-detail"></div>' +
-                '</div>';
+            return '<div class="cmdlet-card animate-fade-up verb-' + escapeHtml(verb) + '" style="animation-delay:' + animDelay + 'ms" data-name="' + escapeHtml(c.name) + '" data-module="' + escapeHtml(c.module) + '">' +
+                '<div class="card-header"><div class="card-name">' + escapeHtml(c.name) + learnLink + '</div>' +
+                '<div class="card-badges">' + apiBadge + '<span class="glass-badge badge-category">' + escapeHtml(c.category) + '</span></div></div>' +
+                '<p class="card-desc">' + escapeHtml(c.description) + '</p>' +
+                '<div class="card-meta">' + permBadge + exBadge + '</div>' +
+                '<div class="card-detail"></div></div>';
         }
 
-        // -- Render next chunk of cards --
         function renderNextChunk() {
             var grid = document.getElementById('cmdletsGrid');
             var chunk = filteredCmdlets.slice(renderedCount, renderedCount + CHUNK_SIZE);
             if (chunk.length === 0) return;
-
-            var html = chunk.map(function(c, i) {
-                var delay = Math.min(i * 15, 300);
-                return buildCardHtml(c, delay);
-            }).join('');
-
+            var html = chunk.map((c, i) => buildCardHtml(c, Math.min(i * 15, 300))).join('');
             grid.insertAdjacentHTML('beforeend', html);
             renderedCount += chunk.length;
-
             if (renderedCount >= filteredCmdlets.length) {
                 var sentinel = document.getElementById('scrollSentinel');
                 if (scrollObserver && sentinel) scrollObserver.unobserve(sentinel);
             }
         }
 
-        // -- Render cmdlet cards (reset + first chunk) --
         function renderCmdlets() {
             var grid = document.getElementById('cmdletsGrid');
             var noResults = document.getElementById('noResults');
-
-            if (filteredCmdlets.length === 0) {
-                grid.classList.add('hidden');
-                noResults.classList.remove('hidden');
-                return;
-            }
-
-            grid.classList.remove('hidden');
-            noResults.classList.add('hidden');
-
-            renderedCount = 0;
-            grid.innerHTML = '';
-            renderNextChunk();
-            setupScrollObserver();
+            if (filteredCmdlets.length === 0) { grid.style.display = 'none'; noResults.style.display = 'block'; return; }
+            grid.style.display = ''; noResults.style.display = 'none';
+            renderedCount = 0; grid.innerHTML = '';
+            renderNextChunk(); setupScrollObserver();
         }
 
-        // -- IntersectionObserver for progressive loading --
         function setupScrollObserver() {
             if (scrollObserver) scrollObserver.disconnect();
             var sentinel = document.getElementById('scrollSentinel');
-            scrollObserver = new IntersectionObserver(function(entries) {
-                if (entries[0].isIntersecting && renderedCount < filteredCmdlets.length) {
-                    renderNextChunk();
-                }
+            scrollObserver = new IntersectionObserver(entries => {
+                if (entries[0].isIntersecting && renderedCount < filteredCmdlets.length) renderNextChunk();
             }, { rootMargin: '200px' });
             scrollObserver.observe(sentinel);
         }
 
-        // -- Update stats --
         function updateStats() {
             document.getElementById('totalCmdlets').textContent = cmdlets.length;
             document.getElementById('filteredCount').textContent = filteredCmdlets.length;
         }
 
-        // -- Theme --
-        function applyTheme(theme) {
-            currentTheme = theme;
-            document.documentElement.classList.toggle('dark', theme === 'dark');
-            localStorage.setItem('theme', theme);
-            updateThemeIcons();
-        }
-        function updateThemeIcons() {
-            var isDark = document.documentElement.classList.contains('dark');
-            document.getElementById('themeIconSun').classList.toggle('hidden', !isDark);
-            document.getElementById('themeIconMoon').classList.toggle('hidden', isDark);
-        }
-
-        // -- Fuzzy search --
         function fuzzyScore(query, target) {
             if (!query || !target) return 0;
-            var q = query.toLowerCase();
-            var t = target.toLowerCase();
+            var q = query.toLowerCase(), t = target.toLowerCase();
             if (t.includes(q)) return 100 + (q.length / t.length) * 50;
             var qi = 0, score = 0, consecutive = 0, lastIdx = -2;
             for (var ti = 0; ti < t.length && qi < q.length; ti++) {
                 if (t[ti] === q[qi]) {
                     score += 1;
-                    if (ti === lastIdx + 1) { consecutive++; score += consecutive * 2; }
-                    else consecutive = 0;
+                    if (ti === lastIdx + 1) { consecutive++; score += consecutive * 2; } else consecutive = 0;
                     if (ti === 0 || t[ti-1] === '-' || t[ti-1] === ' ' || t[ti-1] === '.') score += 5;
                     lastIdx = ti; qi++;
                 }
@@ -622,7 +1191,6 @@
             return qi === q.length ? score : 0;
         }
 
-        // -- Syntax highlighting --
         function highlightPowerShell(code) {
             var html = code;
             html = html.replace(/(&#39;[^&#]*?&#39;)/g, '<span class="ps-string">$1</span>');
@@ -634,13 +1202,10 @@
             return html;
         }
 
-        // -- Parameter parsing --
         var commonParams = new Set(['WhatIf','Confirm','Break','Headers','HttpPipelineAppend','HttpPipelinePrepend','Proxy','ProxyCredential','ProxyUseDefaultCredentials','ResponseHeadersVariable','AdditionalProperties']);
         function parseParameters(syntax) {
-            var params = [];
-            var paramStr = syntax.substring(syntax.indexOf(' ') + 1);
-            var re = /(\[)?-(\w+)(?:\s+<([^>]+)>)?/g;
-            var m;
+            var params = [], paramStr = syntax.substring(syntax.indexOf(' ') + 1);
+            var re = /(\[)?-(\w+)(?:\s+<([^>]+)>)?/g, m;
             while ((m = re.exec(paramStr)) !== null) {
                 if (commonParams.has(m[2]) || m[2] === 'CommonParameters') continue;
                 params.push({ name: m[2], type: m[3] || 'switch', required: !m[1] });
@@ -648,82 +1213,56 @@
             return params;
         }
 
-        // -- Learn URL --
         function getLearnUrl(c) {
             if (!c.module) return '';
             return 'https://learn.microsoft.com/en-us/powershell/module/' + c.module.toLowerCase() + '/' + c.name.toLowerCase();
         }
 
-        // -- Noun map for related cmdlets --
         function buildNounMap() {
             nounMap = {};
             cmdlets.forEach(function(c) {
                 var idx = c.name.indexOf('-');
-                if (idx > 0) {
-                    var noun = c.name.substring(idx + 1);
-                    if (!nounMap[noun]) nounMap[noun] = [];
-                    nounMap[noun].push(c.name);
-                }
+                if (idx > 0) { var noun = c.name.substring(idx + 1); if (!nounMap[noun]) nounMap[noun] = []; nounMap[noun].push(c.name); }
             });
         }
 
-        // -- Alpha index sidebar --
         function buildAlphaIndex() {
             var nav = document.getElementById('alphaIndex');
             if (!nav) return;
-            var letters = [...new Set(filteredCmdlets.map(function(c) { return c.name[0].toUpperCase(); }))].sort();
-            nav.innerHTML = letters.map(function(l) {
-                return '<button class="px-1 py-0.5 hover:text-accent-sky transition-colors" onclick="scrollToLetter(\'' + l + '\')">' + l + '</button>';
-            }).join('');
+            var letters = [...new Set(filteredCmdlets.map(c => c.name[0].toUpperCase()))].sort();
+            nav.innerHTML = letters.map(l => '<button onclick="scrollToLetter(\'' + l + '\')">' + l + '</button>').join('');
         }
         function scrollToLetter(letter) {
-            var idx = filteredCmdlets.findIndex(function(c) { return c.name[0].toUpperCase() === letter; });
+            var idx = filteredCmdlets.findIndex(c => c.name[0].toUpperCase() === letter);
             if (idx < 0) return;
             while (renderedCount <= idx) renderNextChunk();
             var cards = document.querySelectorAll('#cmdletsGrid > div');
             if (cards[idx]) cards[idx].scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
 
-        // -- Recent searches --
         function showRecentSearches() {
             var dd = document.getElementById('recentSearches');
             var input = document.getElementById('searchInput');
-            if (input.value || recentSearches.length === 0) { dd.classList.add('hidden'); return; }
-            dd.classList.remove('hidden');
-            dd.innerHTML = recentSearches.map(function(s) {
-                return '<button class="block w-full text-left px-3 py-1.5 text-sm text-text-secondary hover:bg-surface-800 hover:text-text-primary transition-colors" onclick="applyRecentSearch(this.textContent)">' + escapeHtml(s) + '</button>';
-            }).join('') +
-            '<button class="block w-full text-left px-3 py-1.5 text-xs text-text-ghost hover:text-accent-rose transition-colors border-t border-surface-700" onclick="clearRecentSearches()">Clear history</button>';
+            if (input.value || recentSearches.length === 0) { dd.style.display = 'none'; return; }
+            dd.style.display = 'block';
+            dd.innerHTML = recentSearches.map(s => '<button onclick="applyRecentSearch(this.textContent)">' + escapeHtml(s) + '</button>').join('') +
+                '<button class="clear-btn" onclick="clearRecentSearches()">Clear History</button>';
         }
         function saveRecentSearch(term) {
             if (!term || term.length < 2) return;
-            recentSearches = [term, ...recentSearches.filter(function(s) { return s !== term; })].slice(0, 8);
+            recentSearches = [term, ...recentSearches.filter(s => s !== term)].slice(0, 8);
             localStorage.setItem('recentSearches', JSON.stringify(recentSearches));
         }
-        function applyRecentSearch(term) {
-            document.getElementById('searchInput').value = term;
-            document.getElementById('recentSearches').classList.add('hidden');
-            filterCmdlets();
-        }
-        function clearRecentSearches() {
-            recentSearches = [];
-            localStorage.removeItem('recentSearches');
-            document.getElementById('recentSearches').classList.add('hidden');
-        }
+        function applyRecentSearch(term) { document.getElementById('searchInput').value = term; document.getElementById('recentSearches').style.display = 'none'; filterCmdlets(); }
+        function clearRecentSearches() { recentSearches = []; localStorage.removeItem('recentSearches'); document.getElementById('recentSearches').style.display = 'none'; }
 
-        // -- URL hash routing --
         function serializeState() {
             var p = new URLSearchParams();
-            var q = document.getElementById('searchInput').value;
-            if (q) p.set('q', q);
-            var cat = document.getElementById('categoryFilter').value;
-            if (cat) p.set('cat', cat);
-            var mod = document.getElementById('moduleFilter').value;
-            if (mod) p.set('mod', mod);
-            var perm = document.getElementById('permissionFilter').value;
-            if (perm) p.set('perm', perm);
-            var api = document.getElementById('apiVersionFilter').value;
-            if (api) p.set('api', api);
+            var q = document.getElementById('searchInput').value; if (q) p.set('q', q);
+            var cat = document.getElementById('categoryFilter').value; if (cat) p.set('cat', cat);
+            var mod = document.getElementById('moduleFilter').value; if (mod) p.set('mod', mod);
+            var perm = document.getElementById('permissionFilter').value; if (perm) p.set('perm', perm);
+            var api = document.getElementById('apiVersionFilter').value; if (api) p.set('api', api);
             if (activeVerbs.size > 0) p.set('verbs', [...activeVerbs].join(','));
             if (currentSort !== 'alpha') p.set('sort', currentSort);
             var hash = p.toString();
@@ -743,17 +1282,14 @@
             filterCmdlets();
         }
 
-        // -- Verb button styles --
         function refreshVerbButtonStyles() {
             document.querySelectorAll('#verbFilters button').forEach(function(btn) {
                 var f = btn.dataset.filter;
                 var active = (f === 'all' && activeVerbs.size === 0) || activeVerbs.has(f);
-                tagActive.split(' ').forEach(function(cls) { btn.classList.toggle(cls, active); });
-                tagInactive.split(' ').forEach(function(cls) { btn.classList.toggle(cls, !active); });
+                btn.classList.toggle('verb-tag-active', active);
             });
         }
 
-        // -- Saved presets --
         function savePreset() {
             var name = prompt('Preset name:');
             if (!name) return;
@@ -771,8 +1307,7 @@
             renderPresets();
         }
         function loadPreset(idx) {
-            var p = savedPresets[idx];
-            if (!p) return;
+            var p = savedPresets[idx]; if (!p) return;
             document.getElementById('searchInput').value = p.q || '';
             document.getElementById('categoryFilter').value = p.cat || '';
             document.getElementById('moduleFilter').value = p.mod || '';
@@ -781,102 +1316,44 @@
             activeVerbs = new Set(p.verbs || []);
             currentSort = p.sort || 'alpha';
             document.getElementById('sortSelect').value = currentSort;
-            refreshVerbButtonStyles();
-            filterCmdlets();
+            refreshVerbButtonStyles(); filterCmdlets();
         }
-        function deletePreset(idx) {
-            savedPresets.splice(idx, 1);
-            localStorage.setItem('savedPresets', JSON.stringify(savedPresets));
-            renderPresets();
-        }
+        function deletePreset(idx) { savedPresets.splice(idx, 1); localStorage.setItem('savedPresets', JSON.stringify(savedPresets)); renderPresets(); }
         function renderPresets() {
-            var el = document.getElementById('presetsList');
-            if (!el) return;
-            el.innerHTML = savedPresets.map(function(p, i) {
-                return '<span class="inline-flex items-center gap-1 px-2.5 py-1 text-xs font-medium rounded-full border border-surface-700 text-text-secondary hover:border-surface-600 transition-colors">' +
-                '<button onclick="loadPreset(' + i + ')" class="hover:text-text-primary">' + escapeHtml(p.name) + '</button>' +
-                '<button onclick="deletePreset(' + i + ')" class="text-text-ghost hover:text-accent-rose ml-0.5">&times;</button></span>';
-            }).join('');
+            var el = document.getElementById('presetsList'); if (!el) return;
+            el.innerHTML = savedPresets.map((p, i) =>
+                '<span class="preset-chip"><button onclick="loadPreset(' + i + ')">' + escapeHtml(p.name) + '</button><button onclick="deletePreset(' + i + ')">&times;</button></span>'
+            ).join('');
         }
 
-        // -- Export --
-        function toggleExportMenu() { document.getElementById('exportMenu').classList.toggle('hidden'); }
+        function toggleExportMenu() { var m = document.getElementById('exportMenu'); m.style.display = m.style.display === 'block' ? 'none' : 'block'; }
         function exportResults(format) {
-            document.getElementById('exportMenu').classList.add('hidden');
+            document.getElementById('exportMenu').style.display = 'none';
             var content, filename, mime;
             if (format === 'json') {
-                var data = filteredCmdlets.map(function(c) { return { name: c.name, category: c.category, module: c.module, apiVersion: c.apiVersion, description: c.description }; });
-                content = JSON.stringify(data, null, 2);
+                content = JSON.stringify(filteredCmdlets.map(c => ({ name: c.name, category: c.category, module: c.module, apiVersion: c.apiVersion, description: c.description })), null, 2);
                 filename = 'cmdlets.json'; mime = 'application/json';
             } else {
                 var rows = [['Name','Category','Module','API Version','Description']];
-                filteredCmdlets.forEach(function(c) { rows.push([c.name, c.category, c.module || '', c.apiVersion || '', '"' + c.description.replace(/"/g, '""') + '"']); });
-                content = rows.map(function(r) { return r.map(function(v) { return '"' + String(v).replace(/"/g, '""') + '"'; }).join(','); }).join('\n');
+                filteredCmdlets.forEach(c => rows.push([c.name, c.category, c.module||'', c.apiVersion||'', '"'+c.description.replace(/"/g,'""')+'"']));
+                content = rows.map(r => r.map(v => '"'+String(v).replace(/"/g,'""')+'"').join(',')).join('\n');
                 filename = 'cmdlets.csv'; mime = 'text/csv';
             }
             var blob = new Blob([content], { type: mime });
-            var a = document.createElement('a');
-            a.href = URL.createObjectURL(blob);
-            a.download = filename;
-            document.body.appendChild(a); a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(a.href);
+            var a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = filename;
+            document.body.appendChild(a); a.click(); document.body.removeChild(a); URL.revokeObjectURL(a.href);
         }
 
-        // -- Clipboard --
         function copyText(text) {
-            if (navigator.clipboard) { navigator.clipboard.writeText(text); }
+            if (navigator.clipboard) navigator.clipboard.writeText(text);
             else { var t = document.createElement('textarea'); t.value = text; document.body.appendChild(t); t.select(); document.execCommand('copy'); document.body.removeChild(t); }
         }
 
-        // -- Mobile filter badge --
-        function updateFilterBadge() {
-            var count = 0;
-            if (activeVerbs.size > 0) count++;
-            if (document.getElementById('categoryFilter').value) count++;
-            if (document.getElementById('moduleFilter').value) count++;
-            if (document.getElementById('permissionFilter').value) count++;
-            if (document.getElementById('apiVersionFilter').value) count++;
-            var badge = document.getElementById('filterBadge');
-            if (count > 0) { badge.textContent = count; badge.classList.remove('hidden'); }
-            else { badge.classList.add('hidden'); }
-        }
-        function toggleMobileFilters() {
-            var f = document.getElementById('verbFilters');
-            f.classList.toggle('hidden');
-            f.classList.toggle('flex');
-        }
+        function updateFilterBadge() {}
+        function toggleMobileFilters() { var f = document.getElementById('verbFilters'); f.style.display = f.style.display === 'none' ? 'flex' : 'none'; }
 
-        // -- Onboarding --
-        var onboardingTips = [
-            { target: '#searchInput', text: 'Search by cmdlet name, description, or category. Supports fuzzy matching.' },
-            { target: '#verbFilters', text: 'Click verb buttons to filter by action type. Select multiple verbs at once.' },
-            { target: '#categoryFilter', text: 'Use dropdowns to filter by category, module, API version, or change sort order.' },
-            { target: '#cmdletsGrid', text: 'Click any card to expand it and load full details (syntax, examples, permissions).' }
-        ];
-        function showNextTip() {
-            if (onboardingStep >= onboardingTips.length) { dismissOnboarding(); return; }
-            var tip = onboardingTips[onboardingStep];
-            var target = document.querySelector(tip.target);
-            if (!target) { onboardingStep++; showNextTip(); return; }
-            var overlay = document.getElementById('onboardingOverlay');
-            var tipEl = document.getElementById('onboardingTip');
-            overlay.classList.remove('hidden');
-            document.getElementById('tipText').textContent = tip.text;
-            var rect = target.getBoundingClientRect();
-            tipEl.style.top = Math.min(rect.bottom + 8, window.innerHeight - 150) + 'px';
-            tipEl.style.left = Math.max(8, Math.min(rect.left, window.innerWidth - 320)) + 'px';
-            onboardingStep++;
-        }
-        function dismissOnboarding() {
-            hasSeenOnboarding = true;
-            localStorage.setItem('hasSeenOnboarding', 'true');
-            document.getElementById('onboardingOverlay').classList.add('hidden');
-        }
-
-        // -- Keyboard focus --
         function updateCardFocus() {
-            document.querySelectorAll('.card-focused').forEach(function(el) { el.classList.remove('card-focused'); });
+            document.querySelectorAll('.card-focused').forEach(el => el.classList.remove('card-focused'));
             var cards = document.querySelectorAll('#cmdletsGrid > .cmdlet-card');
             if (focusedCardIndex >= 0 && focusedCardIndex < cards.length) {
                 cards[focusedCardIndex].classList.add('card-focused');
@@ -887,65 +1364,47 @@
         // -- Event listeners --
         document.getElementById('searchInput').addEventListener('input', debounce(filterCmdlets, 150));
         document.getElementById('searchInput').addEventListener('focus', showRecentSearches);
-        document.getElementById('searchInput').addEventListener('blur', function() {
-            setTimeout(function() { document.getElementById('recentSearches').classList.add('hidden'); }, 200);
-        });
+        document.getElementById('searchInput').addEventListener('blur', () => setTimeout(() => { document.getElementById('recentSearches').style.display = 'none'; }, 200));
         document.getElementById('categoryFilter').addEventListener('change', filterCmdlets);
         document.getElementById('moduleFilter').addEventListener('change', filterCmdlets);
         document.getElementById('permissionFilter').addEventListener('change', filterCmdlets);
         document.getElementById('apiVersionFilter').addEventListener('change', filterCmdlets);
         document.getElementById('sortSelect').addEventListener('change', filterCmdlets);
 
-        // Keyboard navigation
         document.addEventListener('keydown', function(e) {
-            if (e.key === '/' && !['INPUT','SELECT','TEXTAREA'].includes(document.activeElement.tagName)) {
-                e.preventDefault(); document.getElementById('searchInput').focus(); return;
-            }
+            if (e.key === '/' && !['INPUT','SELECT','TEXTAREA'].includes(document.activeElement.tagName)) { e.preventDefault(); document.getElementById('searchInput').focus(); return; }
             if (e.key === 'Escape') {
-                document.getElementById('searchInput').value = '';
-                document.getElementById('searchInput').blur();
-                document.getElementById('recentSearches').classList.add('hidden');
-                focusedCardIndex = -1;
-                document.querySelectorAll('.card-focused').forEach(function(el) { el.classList.remove('card-focused'); });
+                document.getElementById('searchInput').value = ''; document.getElementById('searchInput').blur();
+                document.getElementById('recentSearches').style.display = 'none';
+                focusedCardIndex = -1; document.querySelectorAll('.card-focused').forEach(el => el.classList.remove('card-focused'));
                 filterCmdlets(); return;
             }
             if (['INPUT','SELECT','TEXTAREA'].includes(document.activeElement.tagName)) return;
             var cards = document.querySelectorAll('#cmdletsGrid > .cmdlet-card');
-            if (e.key === 'ArrowDown' || e.key === 'j') {
-                e.preventDefault();
-                focusedCardIndex = Math.min(focusedCardIndex + 1, cards.length - 1);
-                while (renderedCount <= focusedCardIndex) renderNextChunk();
-                updateCardFocus();
-            } else if (e.key === 'ArrowUp' || e.key === 'k') {
-                e.preventDefault();
-                focusedCardIndex = Math.max(focusedCardIndex - 1, 0);
-                updateCardFocus();
-            } else if (e.key === 'Enter' && focusedCardIndex >= 0 && focusedCardIndex < cards.length) {
+            if (e.key === 'ArrowDown' || e.key === 'j') { e.preventDefault(); focusedCardIndex = Math.min(focusedCardIndex + 1, cards.length - 1); while (renderedCount <= focusedCardIndex) renderNextChunk(); updateCardFocus(); }
+            else if (e.key === 'ArrowUp' || e.key === 'k') { e.preventDefault(); focusedCardIndex = Math.max(focusedCardIndex - 1, 0); updateCardFocus(); }
+            else if (e.key === 'Enter' && focusedCardIndex >= 0 && focusedCardIndex < cards.length) {
                 e.preventDefault();
                 var card = cards[focusedCardIndex];
                 card.classList.toggle('card-expanded');
                 if (card.classList.contains('card-expanded')) {
-                    var name = card.dataset.name;
-                    var mod = card.dataset.module;
+                    var name = card.dataset.name, mod = card.dataset.module;
                     if (name && mod) populateCardDetail(card, name, mod);
-                    card.querySelectorAll('details').forEach(function(d) { d.open = true; });
-                } else {
-                    card.querySelectorAll('details').forEach(function(d) { d.open = false; });
-                }
+                    card.querySelectorAll('details').forEach(d => d.open = true);
+                } else { card.querySelectorAll('details').forEach(d => d.open = false); }
             }
         });
 
-        // Card expand/collapse + copy (event delegation)
         document.getElementById('cmdletsGrid').addEventListener('click', function(e) {
             var copyBtn = e.target.closest('[data-copy-syntax], [data-copy-ex]');
             if (copyBtn) {
                 e.stopPropagation();
-                var container = copyBtn.closest('.relative') || copyBtn.closest('.group');
-                var pre = container ? container.querySelector('pre, div.bg-surface-800') : null;
-                if (pre) {
-                    copyText(pre.textContent);
+                var container = copyBtn.closest('.detail-syntax') || copyBtn.closest('.example-block');
+                if (container) {
+                    var text = container.textContent;
+                    copyText(text);
                     var svg = copyBtn.querySelector('svg');
-                    if (svg) { var orig = svg.innerHTML; svg.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>'; setTimeout(function() { svg.innerHTML = orig; }, 1500); }
+                    if (svg) { var orig = svg.innerHTML; svg.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>'; setTimeout(() => { svg.innerHTML = orig; }, 1500); }
                 }
                 return;
             }
@@ -954,36 +1413,20 @@
             if (!card) return;
             card.classList.toggle('card-expanded');
             if (card.classList.contains('card-expanded')) {
-                var name = card.dataset.name;
-                var mod = card.dataset.module;
+                var name = card.dataset.name, mod = card.dataset.module;
                 if (name && mod) populateCardDetail(card, name, mod);
-                card.querySelectorAll('details').forEach(function(d) { d.open = true; });
-            } else {
-                card.querySelectorAll('details').forEach(function(d) { d.open = false; });
-            }
+                card.querySelectorAll('details').forEach(d => d.open = true);
+            } else { card.querySelectorAll('details').forEach(d => d.open = false); }
         });
 
-        // Back-to-top
         window.addEventListener('scroll', function() {
             var btn = document.getElementById('backToTop');
-            if (window.scrollY > 400) { btn.classList.remove('opacity-0','pointer-events-none'); btn.classList.add('opacity-100'); }
-            else { btn.classList.add('opacity-0','pointer-events-none'); btn.classList.remove('opacity-100'); }
+            btn.classList.toggle('visible', window.scrollY > 400);
         }, { passive: true });
 
-        // Close export menu on outside click
-        document.addEventListener('click', function(e) {
-            if (!e.target.closest('#exportWrap')) document.getElementById('exportMenu').classList.add('hidden');
-        });
-
-        // Popstate for back/forward
+        document.addEventListener('click', function(e) { if (!e.target.closest('#exportWrap')) document.getElementById('exportMenu').style.display = 'none'; });
         window.addEventListener('popstate', restoreState);
 
-        // Dismiss onboarding on scroll
-        window.addEventListener('scroll', function() {
-            if (!hasSeenOnboarding && !document.getElementById('onboardingOverlay').classList.contains('hidden')) dismissOnboarding();
-        }, { passive: true, once: true });
-
-        // -- Init --
         document.addEventListener('DOMContentLoaded', loadCmdlets);
     </script>
 </body>

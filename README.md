@@ -14,19 +14,28 @@ Also deployed via Vercel (`vercel.json` points at `public/`).
 
 ## Generating Data
 
-Requires the Microsoft.Graph PowerShell modules to be installed.
+### Python parser (primary)
+
+Parses markdown documentation from the [microsoftgraph-docs-powershell](https://github.com/MicrosoftDocs/microsoftgraph-docs-powershell) repo. No module installation required.
+
+```bash
+# Clone the docs repo
+git clone --depth 1 --filter=blob:none --sparse \
+  https://github.com/MicrosoftDocs/microsoftgraph-docs-powershell.git docs
+cd docs && git sparse-checkout set microsoftgraph/graph-powershell-1.0 microsoftgraph/graph-powershell-beta
+cd ..
+
+# Run the parser
+python3 scripts/parse_docs.py docs/microsoftgraph
+```
+
+### PowerShell script (alternative)
+
+Requires the Microsoft.Graph PowerShell modules to be installed. Slower but extracts live module data.
 
 ```powershell
 Install-Module Microsoft.Graph -Scope CurrentUser
-
-# Extract all v1.0 modules
-.\scripts\get-graphcmdlets.ps1
-
-# Include beta modules
-.\scripts\get-graphcmdlets.ps1 -IncludeBeta
-
-# Limit for testing
-.\scripts\get-graphcmdlets.ps1 -MaxCmdlets 50 -Verbose
+.\scripts\get-graphcmdlets.ps1 -IncludeBeta -Verbose
 ```
 
 ### Output
@@ -79,7 +88,8 @@ public/
     cmdlets.json           Full flat file (backward compat)
     modules/               Per-module detail files (lazy loaded)
 scripts/
-  get-graphcmdlets.ps1     Data extraction script
+  parse_docs.py            Python parser (primary, stdlib only)
+  get-graphcmdlets.ps1     PowerShell extraction (alternative)
 vercel.json                Deployment config + cache headers
 ```
 
@@ -97,7 +107,7 @@ vercel.json                Deployment config + cache headers
 
 ## Troubleshooting
 
-**No data loads**: Run `get-graphcmdlets.ps1` first to generate the data files, then serve via HTTP (not `file://`).
+**No data loads**: Run `parse_docs.py` (or `get-graphcmdlets.ps1`) first to generate the data files, then serve via HTTP (not `file://`).
 
 **Module not found**: `Install-Module Microsoft.Graph -Scope CurrentUser`
 

@@ -255,9 +255,11 @@
             top: 64px;
             z-index: 39;
             background: var(--bg-deep);
-            border: 3px ridge var(--border-dim);
-            border-top: none;
             padding: 12px 0;
+        }
+        .filter-bar > .app-container {
+            border: 3px ridge var(--border-dim);
+            padding: 12px 24px;
         }
 
         .filter-row {
@@ -858,6 +860,7 @@
 
             /* Filter bar */
             .filter-bar { position: relative; top: auto; padding: 10px 0; }
+            .filter-bar > .app-container { padding: 10px 12px; }
             .filter-row { flex-direction: column; gap: 8px; }
             .geo-input, .geo-select, .search-wrap { width: 100%; max-width: 100%; box-sizing: border-box; }
 

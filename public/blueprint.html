@@ -222,8 +222,12 @@
             top: 60px;
             z-index: 39;
             background: rgba(10, 22, 40, 0.9);
-            border-bottom: 1px solid var(--border-dim);
             padding: 12px 0;
+        }
+        .filter-bar > .app-container {
+            border: 1px solid var(--border-dim);
+            border-radius: 4px;
+            padding: 12px 24px;
         }
 
         .filter-row {
@@ -816,6 +820,7 @@
 
             /* Filter bar */
             .filter-bar { position: relative; top: auto; padding: 10px 0; }
+            .filter-bar > .app-container { padding: 10px 12px; }
             .filter-row { flex-direction: column; gap: 8px; }
             .crt-input, .crt-select, .search-wrap { width: 100%; max-width: 100%; box-sizing: border-box; }
 

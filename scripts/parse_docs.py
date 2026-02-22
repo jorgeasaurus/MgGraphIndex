@@ -332,10 +332,18 @@ def main():
         if desc and desc != DEFAULT_DESC:
             descriptions[c["name"]] = desc
 
+    # Determine the common module version (all modules share the same version)
+    version_counts = defaultdict(int)
+    for mod, ver in module_versions.items():
+        if ver:
+            version_counts[ver] += 1
+    graph_version = max(version_counts, key=version_counts.get) if version_counts else None
+
+    manifest_wrapper = {"v": graph_version, "d": manifest}
     manifest_path = data_dir / "manifest.json"
-    manifest_path.write_text(json.dumps(manifest, separators=(",", ":")), encoding="utf-8")
+    manifest_path.write_text(json.dumps(manifest_wrapper, separators=(",", ":")), encoding="utf-8")
     manifest_kb = manifest_path.stat().st_size / 1024
-    print(f"Written manifest: {manifest_path} ({len(manifest)} entries, {manifest_kb:.0f}KB)")
+    print(f"Written manifest: {manifest_path} ({len(manifest)} entries, {manifest_kb:.0f}KB, module v{graph_version})")
 
     # Build descriptions file (deferred loading)
     desc_path = data_dir / "descriptions.json"

@@ -209,13 +209,13 @@
         .filter-row {
             display: flex;
             gap: 8px;
-            flex-wrap: wrap;
+            flex-wrap: nowrap;
             align-items: center;
         }
 
         .glass-input {
             flex: 1;
-            min-width: 200px;
+            min-width: 120px;
             padding: 9px 12px 9px 36px;
             background: var(--glass-bg);
             border: 1px solid var(--glass-border);
@@ -239,8 +239,8 @@
 
         .search-wrap {
             position: relative;
-            flex: 1;
-            min-width: 200px;
+            flex: 1.5;
+            min-width: 100px;
         }
         .search-wrap svg {
             position: absolute;
@@ -275,7 +275,8 @@
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
-            max-width: 100%;
+            flex: 1;
+            min-width: 0;
         }
         .glass-select:focus {
             border-color: var(--accent-blue);
@@ -1028,6 +1029,11 @@
                 </div>
                 <div class="stats-row">
                     <div class="stat-block">
+                        <div class="stat-value" id="moduleVersion">--</div>
+                        <div class="stat-label">Module</div>
+                    </div>
+                    <div class="stat-divider"></div>
+                    <div class="stat-block">
                         <div class="stat-value" id="totalCmdlets">0</div>
                         <div class="stat-label">Total</div>
                     </div>
@@ -1165,7 +1171,12 @@
             try {
                 const response = await fetch('data/manifest.json');
                 if (!response.ok) throw new Error('HTTP ' + response.status);
-                const data = await response.json();
+                const wrapper = await response.json();
+                if (wrapper.v) {
+                    var verEl = document.getElementById('moduleVersion');
+                    if (verEl) verEl.textContent = 'v' + wrapper.v;
+                }
+                const data = wrapper.d || wrapper;
                 cmdlets = data.map(c => ({
                     name: c.n || 'Unknown Cmdlet',
                     verb: c.v || getVerb(c.n || ''),

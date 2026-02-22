@@ -6,126 +6,100 @@
     <title>MgGraph Index</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Share+Tech+Mono&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Cascadia+Code:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600&family=Source+Code+Pro:wght@400;500&family=Source+Sans+3:wght@400;600&display=swap" rel="stylesheet">
     <style>
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
         :root {
-            --bg-void: #05080f;
-            --bg-panel: #0a0e1a;
-            --bg-raised: #0f1528;
-            --bg-glow: #141c35;
-            --border-dim: #1a2444;
-            --border-mid: #253566;
-            --border-bright: #3d5afe;
-            --neon-cyan: #00e5ff;
-            --neon-magenta: #ff0090;
-            --neon-yellow: #ffe600;
-            --neon-green: #39ff14;
-            --neon-orange: #ff6d00;
-            --neon-red: #ff1744;
-            --neon-blue: #448aff;
-            --neon-purple: #d500f9;
-            --text-bright: #e0e6f0;
-            --text-mid: #8892b0;
-            --text-dim: #4a5578;
-            --text-ghost: #2a3350;
-            --font-display: 'Orbitron', sans-serif;
-            --font-mono: 'Share Tech Mono', monospace;
-            --font-body: 'Rajdhani', sans-serif;
+            --bg-deep: #0a1628;
+            --bg-panel: #0d1f3c;
+            --bg-raised: #112850;
+            --bg-glow: #163060;
+            --border-dim: #1a3a5a;
+            --border-mid: #2a5a8a;
+            --border-bright: #00aaff;
+            --phosphor: #00aaff;
+            --phosphor-dim: #0077bb;
+            --phosphor-faint: #004477;
+            --amber: #ffcc00;
+            --amber-dim: #b89800;
+            --cyan: #00aaff;
+            --red: #ff4444;
+            --text-bright: #d4e4f7;
+            --text-mid: #8aafcf;
+            --text-dim: #4a6a8a;
+            --text-ghost: #2a4a6a;
+            --font-display: 'Barlow Condensed', sans-serif;
+            --font-mono: 'Source Code Pro', monospace;
+            --font-body: 'Source Sans 3', sans-serif;
         }
 
-        /* --- Scanline overlay --- */
+        /* --- Grid pattern overlay (graph paper) --- */
         body::before {
             content: '';
             position: fixed;
             inset: 0;
-            z-index: 9999;
+            z-index: 0;
             pointer-events: none;
-            background: repeating-linear-gradient(
-                0deg,
-                transparent,
-                transparent 2px,
-                rgba(0, 229, 255, 0.015) 2px,
-                rgba(0, 229, 255, 0.015) 4px
-            );
+            background:
+                repeating-linear-gradient(
+                    0deg,
+                    transparent,
+                    transparent 19px,
+                    rgba(0, 170, 255, 0.04) 19px,
+                    rgba(0, 170, 255, 0.04) 20px
+                ),
+                repeating-linear-gradient(
+                    90deg,
+                    transparent,
+                    transparent 19px,
+                    rgba(0, 170, 255, 0.04) 19px,
+                    rgba(0, 170, 255, 0.04) 20px
+                );
         }
 
-        /* --- Noise grain overlay --- */
+        /* --- Vignette overlay --- */
         body::after {
             content: '';
             position: fixed;
             inset: 0;
-            z-index: 9998;
+            z-index: 0;
             pointer-events: none;
-            opacity: 0.035;
-            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
-            background-repeat: repeat;
-            background-size: 256px 256px;
+            background: radial-gradient(
+                ellipse 85% 85% at 50% 50%,
+                transparent 60%,
+                rgba(5, 10, 20, 0.3) 85%,
+                rgba(5, 10, 20, 0.6) 100%
+            );
         }
 
         body {
             font-family: var(--font-body);
-            background: var(--bg-void);
+            background: var(--bg-deep);
             color: var(--text-bright);
             min-height: 100vh;
             overflow-x: hidden;
             background-image:
-                radial-gradient(ellipse 80% 50% at 50% -20%, rgba(0, 229, 255, 0.06), transparent),
-                radial-gradient(ellipse 60% 40% at 80% 100%, rgba(255, 0, 144, 0.04), transparent),
-                linear-gradient(180deg, var(--bg-void) 0%, #080c18 100%);
+                radial-gradient(ellipse 80% 50% at 50% -20%, rgba(0, 170, 255, 0.03), transparent),
+                radial-gradient(ellipse 60% 40% at 80% 100%, rgba(0, 170, 255, 0.02), transparent);
         }
 
-        /* --- Grid background pattern --- */
-        .cyber-grid {
-            position: fixed;
-            inset: 0;
-            z-index: 0;
-            pointer-events: none;
-            background-image:
-                linear-gradient(rgba(0, 229, 255, 0.03) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(0, 229, 255, 0.03) 1px, transparent 1px);
-            background-size: 60px 60px;
-            -webkit-mask-image: radial-gradient(ellipse 70% 60% at 50% 30%, black 30%, transparent 70%);
-            mask-image: radial-gradient(ellipse 70% 60% at 50% 30%, black 30%, transparent 70%);
+        @keyframes cursor-blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0; }
         }
 
-        /* --- Glitch keyframes --- */
-        @keyframes glitch-1 {
-            0%, 100% { clip-path: inset(0 0 96% 0); transform: translate(0); }
-            20% { clip-path: inset(20% 0 60% 0); transform: translate(-3px, 1px); }
-            40% { clip-path: inset(60% 0 10% 0); transform: translate(3px, -1px); }
-            60% { clip-path: inset(40% 0 30% 0); transform: translate(-2px, 0); }
-            80% { clip-path: inset(80% 0 5% 0); transform: translate(1px, 1px); }
-        }
-        @keyframes glitch-2 {
-            0%, 100% { clip-path: inset(96% 0 0 0); transform: translate(0); }
-            25% { clip-path: inset(50% 0 20% 0); transform: translate(2px, -1px); }
-            50% { clip-path: inset(10% 0 70% 0); transform: translate(-3px, 1px); }
-            75% { clip-path: inset(70% 0 5% 0); transform: translate(2px, 0); }
-        }
-        @keyframes neon-flicker {
-            0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% { opacity: 1; }
-            20%, 24%, 55% { opacity: 0.6; }
-        }
-        @keyframes pulse-glow {
-            0%, 100% { opacity: 0.4; }
-            50% { opacity: 1; }
-        }
         @keyframes slide-in {
-            from { opacity: 0; transform: translateY(8px) skewX(-0.5deg); }
-            to { opacity: 1; transform: translateY(0) skewX(0); }
+            from { opacity: 0; transform: translateY(4px); }
+            to { opacity: 1; transform: translateY(0); }
         }
-        @keyframes data-stream {
-            0% { background-position: 0 0; }
-            100% { background-position: 0 -200px; }
-        }
-        @keyframes border-travel {
-            0% { background-position: 0% 0%; }
-            100% { background-position: 200% 0%; }
-        }
+
         @keyframes spin { to { transform: rotate(360deg); } }
+
+        @keyframes glow-pulse {
+            0%, 100% { text-shadow: 0 0 4px rgba(0, 170, 255, 0.3); }
+            50% { text-shadow: 0 0 6px rgba(0, 170, 255, 0.5), 0 0 12px rgba(0, 170, 255, 0.15); }
+        }
 
         .animate-slide-in {
             opacity: 0;
@@ -134,9 +108,9 @@
 
         /* --- Scrollbar --- */
         ::-webkit-scrollbar { width: 6px; height: 6px; }
-        ::-webkit-scrollbar-track { background: var(--bg-void); }
-        ::-webkit-scrollbar-thumb { background: var(--border-mid); border-radius: 0; }
-        ::-webkit-scrollbar-thumb:hover { background: var(--neon-cyan); }
+        ::-webkit-scrollbar-track { background: var(--bg-deep); }
+        ::-webkit-scrollbar-thumb { background: var(--border-dim); }
+        ::-webkit-scrollbar-thumb:hover { background: var(--phosphor-dim); }
 
         /* --- Layout containers --- */
         .app-container {
@@ -152,11 +126,9 @@
             position: sticky;
             top: 0;
             z-index: 40;
-            background: linear-gradient(180deg, rgba(5, 8, 15, 0.95), rgba(10, 14, 26, 0.9));
-            -webkit-backdrop-filter: blur(20px);
-            backdrop-filter: blur(20px);
+            background: rgba(10, 22, 40, 0.95);
             border-bottom: 1px solid var(--border-dim);
-            padding: 16px 0;
+            padding: 12px 0;
         }
         .header-bar::after {
             content: '';
@@ -165,8 +137,8 @@
             left: 0;
             right: 0;
             height: 1px;
-            background: linear-gradient(90deg, transparent, var(--neon-cyan), var(--neon-magenta), transparent);
-            opacity: 0.5;
+            background: linear-gradient(90deg, transparent, var(--phosphor-dim), var(--phosphor), var(--phosphor-dim), transparent);
+            opacity: 0.6;
         }
 
         .header-inner {
@@ -179,46 +151,25 @@
 
         .logo-block h1 {
             font-family: var(--font-display);
-            font-size: 1.5rem;
-            font-weight: 800;
+            font-size: 2rem;
+            font-weight: 600;
             letter-spacing: 0.15em;
             text-transform: uppercase;
-            color: var(--neon-cyan);
-            text-shadow:
-                0 0 7px rgba(0, 229, 255, 0.6),
-                0 0 20px rgba(0, 229, 255, 0.3),
-                0 0 40px rgba(0, 229, 255, 0.15);
-            position: relative;
-            animation: neon-flicker 4s infinite;
-        }
-        .logo-block h1::before,
-        .logo-block h1::after {
-            content: attr(data-text);
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            overflow: hidden;
-        }
-        .logo-block h1::before {
-            color: var(--neon-magenta);
-            text-shadow: 0 0 7px rgba(255, 0, 144, 0.6);
-            animation: glitch-1 3s infinite;
-            z-index: -1;
-        }
-        .logo-block h1::after {
-            color: var(--neon-yellow);
-            text-shadow: 0 0 7px rgba(255, 230, 0, 0.6);
-            animation: glitch-2 2.5s infinite;
-            z-index: -1;
+            color: var(--phosphor);
+            text-shadow: 0 0 4px rgba(0, 170, 255, 0.4);
+            animation: glow-pulse 4s ease-in-out infinite;
         }
         .logo-block .subtitle {
             font-family: var(--font-mono);
             font-size: 0.7rem;
             color: var(--text-dim);
-            letter-spacing: 0.3em;
+            letter-spacing: 0.2em;
             text-transform: uppercase;
-            margin-top: 2px;
+            margin-top: 0;
+        }
+        .logo-block .subtitle::before {
+            content: '> ';
+            color: var(--phosphor-dim);
         }
 
         /* --- Stats display --- */
@@ -233,10 +184,10 @@
         }
         .stat-block .stat-value {
             font-family: var(--font-display);
-            font-size: 1.4rem;
-            font-weight: 700;
-            color: var(--neon-cyan);
-            text-shadow: 0 0 10px rgba(0, 229, 255, 0.4);
+            font-size: 1.6rem;
+            font-weight: 400;
+            color: var(--phosphor);
+            text-shadow: 0 0 4px rgba(0, 170, 255, 0.3);
         }
         .stat-block .stat-label {
             font-size: 0.6rem;
@@ -247,7 +198,7 @@
         .stat-divider {
             width: 1px;
             height: 32px;
-            background: linear-gradient(180deg, transparent, var(--border-mid), transparent);
+            background: var(--border-dim);
         }
 
         .icon-btn {
@@ -257,24 +208,20 @@
             color: var(--text-mid);
             cursor: pointer;
             transition: all 0.2s;
-            position: relative;
-            clip-path: polygon(0 0, calc(100% - 6px) 0, 100% 6px, 100% 100%, 6px 100%, 0 calc(100% - 6px));
         }
         .icon-btn:hover {
-            color: var(--neon-cyan);
-            border-color: var(--neon-cyan);
-            box-shadow: 0 0 10px rgba(0, 229, 255, 0.2), inset 0 0 10px rgba(0, 229, 255, 0.05);
+            color: var(--phosphor);
+            border-color: var(--phosphor-dim);
+            box-shadow: 0 0 8px rgba(0, 170, 255, 0.15);
         }
         .icon-btn svg { width: 16px; height: 16px; }
 
         /* --- Filter bar --- */
         .filter-bar {
             position: sticky;
-            top: 68px;
+            top: 60px;
             z-index: 39;
-            background: rgba(10, 14, 26, 0.85);
-            -webkit-backdrop-filter: blur(16px);
-            backdrop-filter: blur(16px);
+            background: rgba(10, 22, 40, 0.9);
             border-bottom: 1px solid var(--border-dim);
             padding: 12px 0;
         }
@@ -286,23 +233,22 @@
             align-items: center;
         }
 
-        .cyber-input {
+        .crt-input {
             flex: 1;
-            min-width: 120px;
+            min-width: 0;
             padding: 8px 12px 8px 36px;
             background: var(--bg-panel);
             border: 1px solid var(--border-dim);
-            color: var(--text-bright);
+            color: var(--phosphor);
             font-family: var(--font-mono);
             font-size: 0.85rem;
             outline: none;
             transition: all 0.2s;
-            clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 8px 100%, 0 calc(100% - 8px));
         }
-        .cyber-input::placeholder { color: var(--text-ghost); }
-        .cyber-input:focus {
-            border-color: var(--neon-cyan);
-            box-shadow: 0 0 15px rgba(0, 229, 255, 0.15), inset 0 0 15px rgba(0, 229, 255, 0.03);
+        .crt-input::placeholder { color: var(--text-ghost); }
+        .crt-input:focus {
+            border-color: var(--phosphor-dim);
+            box-shadow: 0 0 10px rgba(0, 170, 255, 0.1), inset 0 0 10px rgba(0, 170, 255, 0.02);
         }
 
         .search-wrap {
@@ -321,7 +267,7 @@
             pointer-events: none;
         }
 
-        .cyber-select {
+        .crt-select {
             padding: 8px 28px 8px 10px;
             background: var(--bg-panel);
             border: 1px solid var(--border-dim);
@@ -332,21 +278,20 @@
             cursor: pointer;
             transition: all 0.2s;
             appearance: none;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%234a5578' fill='none' stroke-width='1.5'/%3E%3C/svg%3E");
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%234a6a8a' fill='none' stroke-width='1.5'/%3E%3C/svg%3E");
             background-repeat: no-repeat;
             background-position: right 8px center;
-            clip-path: polygon(0 0, calc(100% - 6px) 0, 100% 6px, 100% 100%, 6px 100%, 0 calc(100% - 6px));
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
             flex: 1;
             min-width: 0;
         }
-        .cyber-select:focus {
-            border-color: var(--neon-cyan);
+        .crt-select:focus {
+            border-color: var(--phosphor-dim);
             color: var(--text-bright);
         }
-        .cyber-select option {
+        .crt-select option {
             background: var(--bg-panel);
             color: var(--text-bright);
         }
@@ -369,17 +314,16 @@
             color: var(--text-dim);
             cursor: pointer;
             transition: all 0.15s;
-            clip-path: polygon(0 0, calc(100% - 4px) 0, 100% 4px, 100% 100%, 4px 100%, 0 calc(100% - 4px));
         }
         .verb-tag:hover {
             border-color: var(--text-mid);
             color: var(--text-mid);
         }
         .verb-tag-active {
-            background: rgba(0, 229, 255, 0.1) !important;
-            color: var(--neon-cyan) !important;
-            border-color: rgba(0, 229, 255, 0.4) !important;
-            box-shadow: 0 0 8px rgba(0, 229, 255, 0.15);
+            background: rgba(0, 170, 255, 0.08) !important;
+            color: var(--phosphor) !important;
+            border-color: var(--phosphor-dim) !important;
+            box-shadow: none;
         }
 
         /* --- Presets --- */
@@ -403,7 +347,7 @@
             letter-spacing: 0.05em;
         }
         .preset-chip button { background: none; border: none; color: inherit; cursor: pointer; font-size: 0.75rem; }
-        .preset-chip button:hover { color: var(--neon-magenta); }
+        .preset-chip button:hover { color: var(--red); }
         .save-preset-btn {
             padding: 3px 10px;
             font-family: var(--font-mono);
@@ -416,7 +360,7 @@
             letter-spacing: 0.05em;
             transition: all 0.2s;
         }
-        .save-preset-btn:hover { border-color: var(--neon-cyan); color: var(--neon-cyan); }
+        .save-preset-btn:hover { border-color: var(--phosphor-dim); color: var(--phosphor-dim); }
 
         /* --- Theme switcher --- */
         .theme-switcher {
@@ -432,13 +376,12 @@
             cursor: pointer;
             transition: all 0.2s;
             appearance: none;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%234a5578' fill='none' stroke-width='1.5'/%3E%3C/svg%3E");
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%234a6a8a' fill='none' stroke-width='1.5'/%3E%3C/svg%3E");
             background-repeat: no-repeat;
             background-position: right 6px center;
-            clip-path: polygon(0 0, calc(100% - 6px) 0, 100% 6px, 100% 100%, 6px 100%, 0 calc(100% - 6px));
         }
         .theme-switcher:focus {
-            border-color: var(--neon-cyan);
+            border-color: var(--phosphor-dim);
             color: var(--text-bright);
         }
         .theme-switcher option {
@@ -472,9 +415,9 @@
             cursor: pointer;
             transition: all 0.1s;
         }
-        .recent-dropdown button:hover { background: var(--bg-raised); color: var(--neon-cyan); }
+        .recent-dropdown button:hover { background: var(--bg-raised); color: var(--phosphor); }
         .recent-dropdown .clear-btn { font-size: 0.7rem; color: var(--text-ghost); border-top: 1px solid var(--border-dim); }
-        .recent-dropdown .clear-btn:hover { color: var(--neon-red); }
+        .recent-dropdown .clear-btn:hover { color: var(--red); }
 
         /* --- Export menu --- */
         .export-menu {
@@ -500,7 +443,7 @@
             color: var(--text-mid);
             cursor: pointer;
         }
-        .export-menu button:hover { background: var(--bg-raised); color: var(--neon-cyan); }
+        .export-menu button:hover { background: var(--bg-raised); color: var(--phosphor); }
 
         /* --- Main grid --- */
         .main-content {
@@ -509,62 +452,63 @@
         .cards-grid {
             display: grid;
             grid-template-columns: 1fr;
-            gap: 12px;
+            gap: 8px;
         }
 
         /* --- Cmdlet cards --- */
         .cmdlet-card {
             position: relative;
             background: var(--bg-panel);
-            border: 1px solid var(--border-dim);
-            padding: 16px 20px;
+            border: 1px dashed var(--border-dim);
+            padding: 14px 18px;
             cursor: pointer;
             transition: all 0.2s;
             display: flex;
             flex-direction: column;
             opacity: 0;
-            clip-path: polygon(0 0, calc(100% - 12px) 0, 100% 12px, 100% 100%, 12px 100%, 0 calc(100% - 12px));
         }
         .cmdlet-card::before {
             content: '';
             position: absolute;
             top: 0;
             left: 0;
-            width: 3px;
+            width: 2px;
             height: 100%;
             background: var(--border-dim);
             transition: all 0.2s;
         }
         .cmdlet-card:hover {
             border-color: var(--border-mid);
+            border-style: solid;
             background: var(--bg-raised);
         }
         .cmdlet-card:hover::before {
-            background: var(--neon-cyan);
-            box-shadow: 0 0 8px var(--neon-cyan);
+            background: var(--phosphor);
+            box-shadow: 0 0 6px var(--phosphor-dim);
         }
 
         /* Verb-specific left border colors */
         .verb-get .cmdlet-card::before, .cmdlet-card.verb-get::before,
-        .verb-find .cmdlet-card::before, .cmdlet-card.verb-find::before { background: var(--neon-green); }
+        .verb-find .cmdlet-card::before, .cmdlet-card.verb-find::before { background: #00aaff; }
         .verb-set .cmdlet-card::before, .cmdlet-card.verb-set::before,
-        .verb-update .cmdlet-card::before, .cmdlet-card.verb-update::before { background: var(--neon-yellow); }
+        .verb-update .cmdlet-card::before, .cmdlet-card.verb-update::before { background: #ffcc00; }
         .verb-new .cmdlet-card::before, .cmdlet-card.verb-new::before,
-        .verb-confirm .cmdlet-card::before, .cmdlet-card.verb-confirm::before { background: var(--neon-blue); }
+        .verb-confirm .cmdlet-card::before, .cmdlet-card.verb-confirm::before { background: #44cc88; }
         .verb-remove .cmdlet-card::before, .cmdlet-card.verb-remove::before,
-        .verb-clear .cmdlet-card::before, .cmdlet-card.verb-clear::before { background: var(--neon-red); }
-        .verb-invoke .cmdlet-card::before, .cmdlet-card.verb-invoke::before { background: var(--neon-cyan); }
-        .verb-add .cmdlet-card::before, .cmdlet-card.verb-add::before { background: var(--neon-purple); }
+        .verb-clear .cmdlet-card::before, .cmdlet-card.verb-clear::before { background: #ff4444; }
+        .verb-invoke .cmdlet-card::before, .cmdlet-card.verb-invoke::before { background: #ff8844; }
+        .verb-add .cmdlet-card::before, .cmdlet-card.verb-add::before { background: #66bbff; }
         .verb-connect .cmdlet-card::before, .cmdlet-card.verb-connect::before,
-        .verb-disconnect .cmdlet-card::before, .cmdlet-card.verb-disconnect::before { background: var(--text-dim); }
+        .verb-disconnect .cmdlet-card::before, .cmdlet-card.verb-disconnect::before { background: #5588aa; }
 
         .card-name {
-            font-family: 'Cascadia Code', var(--font-mono);
+            font-family: var(--font-mono);
             font-size: 0.9rem;
             font-weight: 400;
-            color: var(--neon-cyan);
+            color: var(--text-bright);
             word-break: break-all;
             line-height: 1.3;
+            text-shadow: none;
         }
         .card-name a {
             color: var(--text-ghost);
@@ -572,7 +516,7 @@
             margin-left: 4px;
             transition: color 0.15s;
         }
-        .card-name a:hover { color: var(--neon-cyan); }
+        .card-name a:hover { color: var(--phosphor); }
         .card-name a svg { display: inline-block; width: 12px; height: 12px; vertical-align: -1px; }
 
         .card-header {
@@ -598,15 +542,15 @@
             padding: 2px 8px;
             border: 1px solid;
         }
-        .badge-api-stable { color: var(--neon-cyan); border-color: rgba(0, 229, 255, 0.3); background: rgba(0, 229, 255, 0.06); }
-        .badge-api-beta { color: var(--neon-orange); border-color: rgba(255, 109, 0, 0.3); background: rgba(255, 109, 0, 0.06); }
+        .badge-api-stable { color: var(--phosphor-dim); border-color: var(--border-dim); background: rgba(0, 170, 255, 0.04); }
+        .badge-api-beta { color: var(--amber); border-color: var(--amber-dim); background: rgba(255, 204, 0, 0.06); }
         .badge-category { color: var(--text-dim); border-color: var(--border-dim); background: var(--bg-raised); }
-        .badge-perm { color: var(--neon-purple); border-color: rgba(213, 0, 249, 0.3); background: rgba(213, 0, 249, 0.06); }
-        .badge-examples { color: var(--neon-green); border-color: rgba(57, 255, 20, 0.3); background: rgba(57, 255, 20, 0.06); }
+        .badge-perm { color: var(--amber-dim); border-color: rgba(184, 152, 0, 0.3); background: rgba(255, 204, 0, 0.04); }
+        .badge-examples { color: #44cc88; border-color: rgba(68, 204, 136, 0.3); background: rgba(68, 204, 136, 0.04); }
 
         .card-desc {
             font-family: var(--font-body);
-            font-size: 0.95rem;
+            font-size: 0.85rem;
             color: var(--text-mid);
             line-height: 1.6;
             display: -webkit-box;
@@ -627,20 +571,20 @@
         .card-detail { min-height: 0; }
 
         .card-focused {
-            outline: 1px solid var(--neon-cyan);
+            outline: 1px solid var(--phosphor);
             outline-offset: 2px;
-            box-shadow: 0 0 20px rgba(0, 229, 255, 0.15);
+            box-shadow: 0 0 8px rgba(0, 170, 255, 0.1);
         }
 
         /* --- Detail sections inside expanded cards --- */
         .detail-syntax {
             position: relative;
-            background: var(--bg-void);
-            border: 1px solid var(--border-dim);
+            background: var(--bg-deep);
+            border: 1px dashed var(--border-dim);
             padding: 14px 44px 14px 14px;
             font-family: var(--font-mono);
             font-size: 0.85rem;
-            color: var(--neon-green);
+            color: var(--phosphor);
             overflow-x: auto;
             white-space: pre-wrap;
             word-break: break-all;
@@ -660,7 +604,7 @@
             opacity: 0;
             transition: all 0.15s;
         }
-        .copy-btn:hover { color: var(--neon-cyan); border-color: var(--neon-cyan); }
+        .copy-btn:hover { color: var(--phosphor); border-color: var(--phosphor-dim); }
         .detail-syntax:hover .copy-btn,
         .example-block:hover .copy-btn,
         .copy-btn:focus { opacity: 1; }
@@ -701,17 +645,17 @@
         }
         .params-table td {
             padding: 6px 14px 6px 0;
-            border-bottom: 1px solid rgba(26, 36, 68, 0.5);
+            border-bottom: 1px solid rgba(26, 58, 90, 0.5);
         }
-        .params-table .param-name { color: var(--neon-cyan); }
+        .params-table .param-name { color: var(--phosphor); }
         .params-table .param-type { color: var(--text-mid); }
-        .params-table .param-req { color: var(--neon-yellow); }
+        .params-table .param-req { color: var(--amber); }
         .params-table .param-opt { color: var(--text-ghost); }
 
         .example-block {
             position: relative;
-            background: var(--bg-void);
-            border: 1px solid var(--border-dim);
+            background: var(--bg-deep);
+            border: 1px dashed var(--border-dim);
             padding: 12px 44px 12px 12px;
             font-family: var(--font-mono);
             font-size: 0.82rem;
@@ -728,9 +672,9 @@
             font-family: var(--font-mono);
             font-size: 0.8rem;
             padding: 3px 10px;
-            border: 1px solid rgba(213, 0, 249, 0.2);
-            color: var(--neon-purple);
-            background: rgba(213, 0, 249, 0.04);
+            border: 1px solid rgba(184, 152, 0, 0.2);
+            color: var(--amber-dim);
+            background: rgba(255, 204, 0, 0.03);
             margin: 2px;
         }
 
@@ -744,25 +688,25 @@
             cursor: pointer;
             transition: all 0.15s;
         }
-        .related-btn:hover { color: var(--neon-cyan); border-color: var(--neon-cyan); }
+        .related-btn:hover { color: var(--phosphor); border-color: var(--phosphor-dim); }
 
         /* --- PowerShell syntax highlighting --- */
         .ps-comment { color: var(--text-ghost); font-style: italic; }
-        .ps-string { color: var(--neon-yellow); }
-        .ps-variable { color: var(--neon-cyan); }
-        .ps-cmdlet { color: var(--neon-green); }
-        .ps-type { color: var(--neon-purple); }
+        .ps-string { color: var(--amber); }
+        .ps-variable { color: #44cc88; }
+        .ps-cmdlet { color: var(--phosphor); }
+        .ps-type { color: var(--amber-dim); }
 
         /* --- Loading spinner --- */
-        .cyber-spinner {
+        .crt-spinner {
             display: inline-block;
             width: 32px;
             height: 32px;
             border: 2px solid var(--border-dim);
-            border-top-color: var(--neon-cyan);
+            border-top-color: var(--phosphor);
             animation: spin 0.8s linear infinite;
         }
-        .cyber-spinner-sm {
+        .crt-spinner-sm {
             width: 18px;
             height: 18px;
             border-width: 2px;
@@ -774,6 +718,10 @@
             color: var(--text-dim);
             margin-top: 8px;
         }
+        .loading-text::after {
+            content: '_';
+            animation: cursor-blink 1s step-end infinite;
+        }
 
         /* --- No results --- */
         .no-results {
@@ -783,7 +731,7 @@
         }
         .no-results h3 {
             font-family: var(--font-display);
-            font-size: 1.1rem;
+            font-size: 1.4rem;
             color: var(--text-mid);
             letter-spacing: 0.1em;
         }
@@ -817,7 +765,7 @@
             cursor: pointer;
             transition: color 0.1s;
         }
-        .alpha-nav button:hover { color: var(--neon-cyan); text-shadow: 0 0 6px rgba(0, 229, 255, 0.5); }
+        .alpha-nav button:hover { color: var(--phosphor); text-shadow: 0 0 4px rgba(0, 170, 255, 0.4); }
 
         /* --- Back to top --- */
         .back-to-top {
@@ -833,9 +781,8 @@
             opacity: 0;
             pointer-events: none;
             transition: all 0.2s;
-            clip-path: polygon(0 0, calc(100% - 6px) 0, 100% 6px, 100% 100%, 6px 100%, 0 calc(100% - 6px));
         }
-        .back-to-top:hover { color: var(--neon-cyan); border-color: var(--neon-cyan); }
+        .back-to-top:hover { color: var(--phosphor); border-color: var(--phosphor-dim); }
         .back-to-top.visible { opacity: 1; pointer-events: auto; }
         .back-to-top svg { width: 18px; height: 18px; }
 
@@ -843,7 +790,7 @@
         @media (max-width: 640px) {
             .header-inner { flex-direction: column; align-items: flex-start; }
             .filter-row { flex-direction: column; }
-            .cyber-input, .search-wrap { min-width: 100%; }
+            .crt-input, .search-wrap { min-width: 100%; }
             .verb-tags { display: none; }
         }
 
@@ -864,17 +811,16 @@
             color: var(--text-dim);
             cursor: pointer;
             transition: all 0.2s;
-            clip-path: polygon(0 0, calc(100% - 4px) 0, 100% 4px, 100% 100%, 4px 100%, 0 calc(100% - 4px));
         }
-        .mobile-filter-toggle:hover { border-color: var(--neon-cyan); color: var(--neon-cyan); }
+        .mobile-filter-toggle:hover { border-color: var(--phosphor-dim); color: var(--phosphor-dim); }
         @media (max-width: 640px) { .mobile-filter-toggle { display: inline-flex; } }
         .filter-badge {
             display: none;
             padding: 1px 6px;
             font-size: 0.65rem;
-            background: rgba(0, 229, 255, 0.15);
-            color: var(--neon-cyan);
-            border: 1px solid rgba(0, 229, 255, 0.3);
+            background: rgba(0, 170, 255, 0.1);
+            color: var(--phosphor);
+            border: 1px solid var(--phosphor-dim);
         }
         .filter-badge.active { display: inline; }
 
@@ -889,16 +835,15 @@
         .onboarding-tip {
             position: absolute;
             background: var(--bg-panel);
-            border: 1px solid rgba(0, 229, 255, 0.3);
+            border: 1px solid var(--phosphor-dim);
             padding: 16px;
             max-width: 300px;
             pointer-events: auto;
-            clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 10px 100%, 0 calc(100% - 10px));
-            box-shadow: 0 0 20px rgba(0, 229, 255, 0.1), inset 0 0 20px rgba(0, 229, 255, 0.02);
+            box-shadow: 0 0 12px rgba(0, 170, 255, 0.06);
         }
         .onboarding-tip p {
             font-family: var(--font-body);
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             color: var(--text-bright);
             line-height: 1.5;
             margin-bottom: 12px;
@@ -927,24 +872,22 @@
             font-size: 0.7rem;
             text-transform: uppercase;
             letter-spacing: 0.05em;
-            background: rgba(0, 229, 255, 0.1);
-            border: 1px solid rgba(0, 229, 255, 0.3);
-            color: var(--neon-cyan);
+            background: rgba(0, 170, 255, 0.08);
+            border: 1px solid var(--phosphor-dim);
+            color: var(--phosphor);
             cursor: pointer;
             transition: all 0.15s;
-            clip-path: polygon(0 0, calc(100% - 4px) 0, 100% 4px, 100% 100%, 4px 100%, 0 calc(100% - 4px));
         }
-        .onboarding-next:hover { background: rgba(0, 229, 255, 0.2); }
+        .onboarding-next:hover { background: rgba(0, 170, 255, 0.15); }
     </style>
 </head>
 <body>
-    <div class="cyber-grid"></div>
 
     <div class="header-bar">
         <div class="app-container">
             <div class="header-inner">
                 <div class="logo-block">
-                    <h1 data-text="MgGraph Index">MgGraph Index</h1>
+                    <h1>MgGraph Index</h1>
                     <div class="subtitle">Microsoft Graph PowerShell Cmdlet Index</div>
                 </div>
                 <div class="stats-row">
@@ -974,10 +917,10 @@
                     </div>
                     <select class="theme-switcher" id="themeSwitcher" aria-label="Switch theme" onchange="switchTheme(this.value)">
                         <option value="index.html">Glass</option>
-                        <option value="cyberpunk.html" selected>Cyberpunk</option>
+                        <option value="cyberpunk.html">Cyberpunk</option>
                         <option value="crt.html">CRT</option>
                         <option value="synthwave.html">Synthwave</option>
-                        <option value="blueprint.html">Blueprint</option>
+                        <option value="blueprint.html" selected>Blueprint</option>
                         <option value="solarized.html">Solarized</option>
                     </select>
                 </div>
@@ -990,18 +933,18 @@
             <div class="filter-row">
                 <div class="search-wrap">
                     <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
-                    <input type="text" class="cyber-input" id="searchInput" placeholder="Search">
+                    <input type="text" class="crt-input" id="searchInput" placeholder="Search">
                     <div id="recentSearches" class="recent-dropdown"></div>
                 </div>
-                <select class="cyber-select" id="categoryFilter" aria-label="Category"><option value="">All Categories</option></select>
-                <select class="cyber-select" id="moduleFilter" aria-label="Module"><option value="">All Modules</option></select>
-                <select class="cyber-select" id="permissionFilter" aria-label="Permission"><option value="">All Permissions</option></select>
-                <select class="cyber-select" id="apiVersionFilter" aria-label="API version">
+                <select class="crt-select" id="categoryFilter" aria-label="Category"><option value="">All Categories</option></select>
+                <select class="crt-select" id="moduleFilter" aria-label="Module"><option value="">All Modules</option></select>
+                <select class="crt-select" id="permissionFilter" aria-label="Permission"><option value="">All Permissions</option></select>
+                <select class="crt-select" id="apiVersionFilter" aria-label="API version">
                     <option value="">All Versions</option>
                     <option value="v1.0">v1.0</option>
                     <option value="beta">Beta</option>
                 </select>
-                <select class="cyber-select" id="sortSelect" aria-label="Sort">
+                <select class="crt-select" id="sortSelect" aria-label="Sort">
                     <option value="alpha">Sort: A-Z</option>
                     <option value="category">Sort: Category</option>
                     <option value="permissions">Sort: Permissions</option>
@@ -1021,8 +964,8 @@
         <main class="main-content">
             <div class="cards-grid" id="cmdletsGrid">
                 <div style="text-align:center;padding:60px 20px">
-                    <div class="cyber-spinner"></div>
-                    <div class="loading-text">Loading cmdlets...</div>
+                    <div class="crt-spinner"></div>
+                    <div class="loading-text">Loading cmdlets</div>
                 </div>
             </div>
             <div class="no-results" id="noResults">
@@ -1138,7 +1081,7 @@
                     buildPermissionIndex(); populateFilters(); populatePermissionFilter(); restoreState();
                     if (!hasSeenOnboarding) setTimeout(showNextTip, 800);
                 } catch (e2) {
-                    document.getElementById('cmdletsGrid').innerHTML = '<div style="text-align:center;padding:60px 20px"><h3 style="color:var(--neon-red);font-family:var(--font-display);font-size:1rem;letter-spacing:0.1em">// LINK DEAD</h3><p style="color:var(--text-ghost);font-family:var(--font-mono);font-size:0.75rem;margin-top:8px">Could not establish data uplink. Run extraction script.</p></div>';
+                    document.getElementById('cmdletsGrid').innerHTML = '<div style="text-align:center;padding:60px 20px"><h3 style="color:var(--red);font-family:var(--font-display);font-size:1.4rem;letter-spacing:0.1em">CONNECTION FAILED</h3><p style="color:var(--text-ghost);font-family:var(--font-mono);font-size:0.75rem;margin-top:8px">Unable to load data. Run extraction script.</p></div>';
                 }
             }
         }
@@ -1221,10 +1164,10 @@
         async function populateCardDetail(card, cmdletName, moduleName) {
             const detailContainer = card.querySelector('.card-detail');
             if (!detailContainer || detailContainer.dataset.loaded === 'true') return;
-            detailContainer.innerHTML = '<div style="text-align:center;padding:12px"><div class="cyber-spinner cyber-spinner-sm" style="display:inline-block"></div><div style="font-family:var(--font-mono);font-size:0.65rem;color:var(--text-ghost);margin-top:4px">FETCHING...</div></div>';
+            detailContainer.innerHTML = '<div style="text-align:center;padding:12px"><div class="crt-spinner crt-spinner-sm" style="display:inline-block"></div><div style="font-family:var(--font-mono);font-size:0.65rem;color:var(--text-ghost);margin-top:4px">LOADING</div></div>';
             const moduleData = await loadModuleDetail(moduleName);
             if (!moduleData || !moduleData.cmdlets || !moduleData.cmdlets[cmdletName]) {
-                detailContainer.innerHTML = '<p style="font-family:var(--font-mono);font-size:0.7rem;color:var(--text-ghost);padding:8px 0">// DATA UNAVAILABLE</p>';
+                detailContainer.innerHTML = '<p style="font-family:var(--font-mono);font-size:0.7rem;color:var(--text-ghost);padding:8px 0">NO DATA AVAILABLE</p>';
                 detailContainer.dataset.loaded = 'true';
                 return;
             }

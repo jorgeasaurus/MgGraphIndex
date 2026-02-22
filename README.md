@@ -39,16 +39,28 @@ The parser uses Python stdlib only -- no pip dependencies.
 
 ## Themes
 
-Six visual themes, each a standalone HTML file with identical JS logic:
+Seven visual themes, each a standalone HTML file with identical JS logic. All support light/dark mode toggle and `prefers-color-scheme`.
 
-- `index.html` -- Glass morphism (default)
-- `blueprint.html` -- Technical blueprint
-- `cyberpunk.html` -- Neon cyberpunk
-- `crt.html` -- Retro CRT phosphor
-- `synthwave.html` -- 80s synthwave
-- `solarized.html` -- Solarized palette
+### Acrylic (default)
+![Acrylic theme](screenshots/acrylic.png)
 
-All support light/dark mode toggle and `prefers-color-scheme`.
+### Cyberpunk
+![Cyberpunk theme](screenshots/cyberpunk.png)
+
+### CRT
+![CRT theme](screenshots/crt.png)
+
+### Synthwave
+![Synthwave theme](screenshots/synthwave.png)
+
+### Blueprint
+![Blueprint theme](screenshots/blueprint.png)
+
+### Solarized
+![Solarized theme](screenshots/solarized.png)
+
+### Geocities
+![Geocities theme](screenshots/geocities.png)
 
 ## Key Features
 
@@ -64,11 +76,12 @@ All support light/dark mode toggle and `prefers-color-scheme`.
 
 ```
 public/
-  *.html                    Theme variants (6 files)
+  *.html                    Theme variants (7 files)
   data/
     manifest.json           Cmdlet index (~3.5 MB)
     descriptions.json       Deferred descriptions (~3 MB)
     modules/                Per-module detail (79 files)
+screenshots/                Theme preview images
 scripts/
   parse_docs.py             Python parser (primary)
   get-graphcmdlets.ps1      PowerShell extractor (alternative)

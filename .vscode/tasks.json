@@ -2,6 +2,14 @@
   "version": "2.0.0",
   "tasks": [
     {
+      "label": "Update Cmdlet Data",
+      "type": "shell",
+      "command": "rm -rf docs && git clone --depth 1 --filter=blob:none --sparse https://github.com/MicrosoftDocs/microsoftgraph-docs-powershell.git docs && cd docs && git sparse-checkout set microsoftgraph/graph-powershell-1.0 microsoftgraph/graph-powershell-beta && cd .. && python3 scripts/parse_docs.py docs/microsoftgraph",
+      "group": "build",
+      "problemMatcher": [],
+      "detail": "Clone Microsoft Graph docs and parse cmdlet metadata into public/data/"
+    },
+    {
       "label": "Deploy to GitHub Pages",
       "type": "shell",
       "command": "git subtree push --prefix public origin gh-pages",

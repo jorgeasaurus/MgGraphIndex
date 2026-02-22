@@ -314,28 +314,34 @@ def main():
     unique_modules = sorted(set(c["module"] for c in all_cmdlets))
     module_versions = fetch_all_module_versions(unique_modules)
 
-    # Build manifest (lightweight summary)
+    # Build slim manifest (short keys, no descriptions or moduleVersion)
+    DEFAULT_DESC = "Microsoft Graph PowerShell cmdlet."
     manifest = []
+    descriptions = {}
     for c in all_cmdlets:
-        entry = {
-            "name": c["name"],
-            "verb": c["verb"],
-            "category": c["category"],
-            "module": c["module"],
-            "apiVersion": c["apiVersion"],
-            "description": c["description"],
-            "permissionCount": len(c["permissions"]),
-            "hasExamples": len(c["examples"]) > 0,
-        }
-        ver = module_versions.get(c["module"])
-        if ver:
-            entry["moduleVersion"] = ver
-        manifest.append(entry)
+        manifest.append({
+            "n": c["name"],
+            "v": c["verb"],
+            "c": c["category"],
+            "m": c["module"],
+            "a": c["apiVersion"],
+            "p": len(c["permissions"]),
+            "e": len(c["examples"]) > 0,
+        })
+        desc = c["description"]
+        if desc and desc != DEFAULT_DESC:
+            descriptions[c["name"]] = desc
 
     manifest_path = data_dir / "manifest.json"
     manifest_path.write_text(json.dumps(manifest, separators=(",", ":")), encoding="utf-8")
     manifest_kb = manifest_path.stat().st_size / 1024
     print(f"Written manifest: {manifest_path} ({len(manifest)} entries, {manifest_kb:.0f}KB)")
+
+    # Build descriptions file (deferred loading)
+    desc_path = data_dir / "descriptions.json"
+    desc_path.write_text(json.dumps(descriptions, separators=(",", ":")), encoding="utf-8")
+    desc_kb = desc_path.stat().st_size / 1024
+    print(f"Written descriptions: {desc_path} ({len(descriptions)} entries, {desc_kb:.0f}KB)")
 
     # Build per-module detail files
     module_groups = defaultdict(list)

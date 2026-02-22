@@ -32,6 +32,7 @@ jobs:
           git clone --depth 1 --filter=blob:none --sparse \
             https://github.com/MicrosoftDocs/microsoftgraph-docs-powershell.git docs
           cd docs && git sparse-checkout set microsoftgraph/graph-powershell-1.0 microsoftgraph/graph-powershell-beta
+          rm -rf .git
 
       - name: Parse documentation
         run: python3 scripts/parse_docs.py docs/microsoftgraph

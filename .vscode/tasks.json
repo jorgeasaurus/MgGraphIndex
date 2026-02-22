@@ -1,0 +1,21 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Deploy to GitHub Pages",
+      "type": "shell",
+      "command": "git subtree push --prefix public origin gh-pages",
+      "group": "build",
+      "problemMatcher": [],
+      "detail": "Push the public/ directory to the gh-pages branch"
+    },
+    {
+      "label": "Deploy to GitHub Pages (Force)",
+      "type": "shell",
+      "command": "git push origin $(git subtree split --prefix public):gh-pages --force",
+      "group": "build",
+      "problemMatcher": [],
+      "detail": "Force push the public/ directory to gh-pages (use when subtree push fails due to history mismatch)"
+    }
+  ]
+}

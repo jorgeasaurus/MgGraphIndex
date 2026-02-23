@@ -4,7 +4,7 @@ Interactive, searchable reference for all 24,000+ Microsoft Graph PowerShell cmd
 
 Deployed to GitHub Pages. Data updated daily via GitHub Actions.
 
-![Visitor Counter](https://mggraphindex.goatcounter.com/counter/%2Findex.html.svg)
+![Visitor Counter](https://mggraphindex.goatcounter.com/counter/TOTAL.svg)
 
 ## Quick Start
 

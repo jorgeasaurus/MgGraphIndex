@@ -37,6 +37,9 @@ jobs:
       - name: Parse documentation
         run: python3 scripts/parse_docs.py docs/microsoftgraph
 
+      - name: Clean up cloned docs
+        run: rm -rf docs
+
       - name: Commit updated data
         id: auto-commit
         run: |

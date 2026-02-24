@@ -59,7 +59,7 @@ jobs:
 
   deploy:
     needs: update-data
-    if: needs.update-data.outputs.changes_detected == 'true'
+    if: needs.update-data.outputs.changes_detected == 'true' || github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     environment:
       name: github-pages

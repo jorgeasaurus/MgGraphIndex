@@ -1,5 +1,7 @@
 # MgGraph Index
 
+https://jorgeasaurus.github.io/MgGraphIndex/
+
 Interactive, searchable reference for all 24,000+ Microsoft Graph PowerShell cmdlets. Static site -- no backend, no framework, no build step.
 
 Deployed to GitHub Pages. Data updated daily via GitHub Actions.
